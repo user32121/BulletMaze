@@ -8,6 +8,7 @@ int main() {
   sf::Clock clock;
   gameState state;
   loadResources(&state);
+  initialize(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
       handleEvent(&window, &state, &event);
