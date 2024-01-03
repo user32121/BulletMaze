@@ -1,19 +1,21 @@
 #include <SFML/Graphics.hpp>
 
-int main()
-{
+#include "game.h"
+
+int main() {
   sf::RenderWindow window{{800, 600}, "CMake SFML Project"};
   window.setFramerateLimit(60);
-
   sf::Clock clock;
+  gameState state;
+  loadResources(&state);
+  initialize(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
-      if (event.type == sf::Event::Closed) {
-        window.close();
-      }
+      handleEvent(&window, &state, &event);
     }
-
-    // window.clear();
+    update(&clock, &state);
+    window.clear();
+    render(&window, &state);
     window.display();
   }
 }
