@@ -10,7 +10,8 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(BulletMaze src/main.cpp)
+add_executable(BulletMaze)
+add_subdirectory(src)
 target_link_libraries(BulletMaze PRIVATE sfml-graphics)
 target_compile_features(BulletMaze PRIVATE cxx_std_17)
 

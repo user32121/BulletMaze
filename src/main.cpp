@@ -1,31 +1,20 @@
 #include <SFML/Graphics.hpp>
 
-int main()
-{
-  // TODO get a resource manager
-  sf::Texture texture;
-  texture.create(64, 64);
-  sf::Uint8 pixels[64 * 64 * 4];
-  for (size_t i = 0; i < 64 * 64 * 4; ++i) {
-    pixels[i] = (i % 4) != 1 ? 0xFF : 0;
-  }
-  texture.update(pixels);
-  texture.loadFromFile("resources/textures/Untitled.png");
-  sf::Sprite sprite{texture};
+#include "game.h"
 
+int main() {
   sf::RenderWindow window{{800, 600}, "CMake SFML Project"};
   window.setFramerateLimit(60);
-
   sf::Clock clock;
+  gameState state;
+  loadResources(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
-      if (event.type == sf::Event::Closed) {
-        window.close();
-      }
+      handleEvent(&window, &state, &event);
     }
-    window.draw(sprite);
-
-    // window.clear();//
+    update(&clock, &state);
+    window.clear();
+    render(&window, &state);
     window.display();
   }
 }
