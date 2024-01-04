@@ -3,19 +3,22 @@
 #include "game.h"
 
 int main() {
-  sf::RenderWindow window{{800, 600}, "CMake SFML Project"};
+  sf::RenderWindow window{{800, 600}, "Bullet Maze"};
   window.setFramerateLimit(60);
   sf::Clock clock;
-  gameState state;
+  GameState state;
+  state.window = &window;
+  state.clock = &clock;
+
   loadResources(&state);
   initialize(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
-      handleEvent(&window, &state, &event);
+      handleEvent(&state, &event);
     }
-    update(&clock, &state);
+    update(&state);
     window.clear();
-    render(&window, &state);
+    render(&state);
     window.display();
   }
 }

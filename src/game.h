@@ -1,15 +1,26 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 
-#include "tiles/tile.h"
+struct GameState;
+#include "tiles/Tile.h"
 
-struct gameState {
+struct GameState {
+  sf::RenderWindow* window;
+  sf::Clock* clock;
+
   sf::Texture spriteSheet;
   sf::Sprite floorSprites[4];
-  std::vector<std::vector<std::vector<tile>>> board;
+  std::vector<std::vector<std::vector<Tile>>> board;
 };
 
-void loadResources(gameState* state);
-void initialize(gameState* state);
-void handleEvent(sf::RenderWindow* window, gameState* state, sf::Event* event);
-void update(sf::Clock* clock, gameState* state);
-void render(sf::RenderWindow* window, gameState* state);
+/// @brief Loads all resources needed by the game. Called before initialize().
+void loadResources(GameState* state);
+/// @brief Prepares initial game state. Called after loadResources().
+void initialize(GameState* state);
+/// @brief Called for each event that occurs
+void handleEvent(GameState* state, sf::Event* event);
+/// @brief Performs game logic.
+void update(GameState* state);
+/// @brief Performs rendering calls.
+void render(GameState* state);

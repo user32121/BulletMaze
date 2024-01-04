@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-void loadResources(gameState* state) {
+void loadResources(GameState* state) {
   state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
   for (size_t i = 0; i < 4; i++) {
     state->floorSprites[i].setTexture(state->spriteSheet);
@@ -11,8 +11,8 @@ void loadResources(gameState* state) {
   }
 }
 
-void initialize(gameState* state) {
-  std::vector<tile> floors;
+void initialize(GameState* state) {
+  std::vector<Tile> floors;
   for (size_t i = 0; i < 4; ++i) {
     floors.push_back({state->floorSprites[i]});
   }
@@ -25,19 +25,19 @@ void initialize(gameState* state) {
   }
 }
 
-void handleEvent(sf::RenderWindow* window, gameState* state, sf::Event* event) {
+void handleEvent(GameState* state, sf::Event* event) {
   if (event->type == sf::Event::Closed) {
-    window->close();
+    state->window->close();
   }
 }
 
-void update(sf::Clock* clock, gameState* state) {}
+void update(GameState* state) {}
 
-void render(sf::RenderWindow* window, gameState* state) {
+void render(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
       for (auto&& tile : state->board[x][y]) {
-        tile.render(window, x, y);
+        tile.render(state, x, y);
       }
     }
   }
