@@ -1,5 +1,7 @@
 #include "PlayerTile.h"
 
+#include <cmath>
+
 PlayerTile::PlayerTile(sf::Sprite sprite, size_t x, size_t y)
     : Tile{sprite}, moveToX{x}, moveToY{y} {}
 
