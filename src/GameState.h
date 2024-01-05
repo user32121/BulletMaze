@@ -1,6 +1,7 @@
 #pragma once
 
-struct GameState;
+#include <queue>
+
 #include "tiles/Tile.h"
 
 #define TOTAL_MOVE_DELTA 0.15f
@@ -12,6 +13,7 @@ struct Input {
   bool down = false;
 };
 
+class Tile;
 struct GameState {
   sf::RenderWindow* window;
   sf::Clock* clock;
