@@ -31,16 +31,7 @@ void handleEvent(GameState* state, sf::Event* event) {
       state->window->close();
       break;
     case sf::Event::KeyPressed:
-      state->input.left |= sf::Keyboard::Left == event->key.code;
-      state->input.right |= sf::Keyboard::Right == event->key.code;
-      state->input.up |= sf::Keyboard::Up == event->key.code;
-      state->input.down |= sf::Keyboard::Down == event->key.code;
-      break;
-    case sf::Event::KeyReleased:
-      state->input.left &= sf::Keyboard::Left != event->key.code;
-      state->input.right &= sf::Keyboard::Right != event->key.code;
-      state->input.up &= sf::Keyboard::Up != event->key.code;
-      state->input.down &= sf::Keyboard::Down != event->key.code;
+      state->input.presses.push(event->key.code);
       break;
   }
 }

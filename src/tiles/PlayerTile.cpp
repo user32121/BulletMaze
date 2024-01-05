@@ -5,19 +5,37 @@ PlayerTile::PlayerTile(sf::Sprite sprite, size_t x, size_t y)
 
 bool PlayerTile::update(GameState* state, size_t x, size_t y) {
   if (moveToX == x && moveToY == y) {
-    // check if need to start moving
-    int vx = state->input.right - state->input.left;
-    int vy = state->input.down - state->input.up;
-    if (vx != 0 && canMove(state, x, y, vx, 0)) {
-      moveToX = x + vx;
-    } else if (vy != 0 && canMove(state, x, y, 0, vy)) {
-      moveToY = y + vy;
-    } else {
-      return false;
+    if (state->input.presses.size()) {
+      // check if need to start moving
+      int vx = 0;
+      int vy = 0;
+      sf::Keyboard::Key k = state->input.presses.front();
+      state->input.presses.pop();
+      switch (k) {
+        case sf::Keyboard::Left:
+          vx = -1;
+          break;
+        case sf::Keyboard::Right:
+          vx = 1;
+          break;
+        case sf::Keyboard::Up:
+          vy = -1;
+          break;
+        case sf::Keyboard::Down:
+          vy = 1;
+          break;
+      }
+      if (vx != 0 && canMove(state, moveToX, moveToY, vx, 0)) {
+        moveToX = moveToX + vx;
+      } else if (vy != 0 && canMove(state, moveToX, moveToY, 0, vy)) {
+        moveToY = moveToY + vy;
+      } else {
+        return false;
+      }
+      state->moveDelta = 0;
+      startedMoving = state->clock->getElapsedTime();
+      moveBoard(state);
     }
-    state->moveDelta = 0;
-    startedMoving = state->clock->getElapsedTime();
-    moveBoard(state);
   } else {
     // continue moving
     sf::Time t = state->clock->getElapsedTime();

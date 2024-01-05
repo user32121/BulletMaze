@@ -7,10 +7,7 @@
 #define TOTAL_MOVE_DELTA 0.15f
 
 struct Input {
-  bool left = false;
-  bool right = false;
-  bool up = false;
-  bool down = false;
+  std::queue<sf::Keyboard::Key> presses;
 };
 
 class Tile;
