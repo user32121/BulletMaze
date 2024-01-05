@@ -2,11 +2,18 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "tiles/BulletSpawnerTile.h"
 #include "tiles/PlayerTile.h"
 #include "tiles/SolidTile.h"
+#include "tiles/StraightBulletTile.h"
 
 void loadResources(GameState* state) {
   state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
+}
+
+inline sf::Sprite getSprite(GameState* state, int x, int y) {
+  return {state->spriteSheet,
+          {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
 }
 
 void initialize(GameState* state) {
@@ -18,20 +25,25 @@ void initialize(GameState* state) {
   for (size_t x = 0; x < width; ++x) {
     state->board[x].resize(height);
     for (size_t y = 0; y < height; y++) {
-      state->board[x][y].push_back(
-          new Tile{{state->spriteSheet,
-                    {TILE_SIZE * (rand() % 4), 0, TILE_SIZE, TILE_SIZE}}});
+      state->board[x][y].push_back(new Tile{getSprite(state, rand() % 4, 0)});
     }
   }
   // player
-  state->board[0][0].push_back(new PlayerTile{
-      {state->spriteSheet, {TILE_SIZE * 4, 0, TILE_SIZE, TILE_SIZE}}, 0, 0});
+  state->board[0][0].push_back(new PlayerTile{getSprite(state, 4, 0), 0, 0});
 
   // random obstacles
   for (size_t i = 0; i < 3; ++i) {
-    state->board[rand() % width][rand() % height].push_back(new SolidTile{
-        {state->spriteSheet, {TILE_SIZE * 5, 0, TILE_SIZE, TILE_SIZE}}});
+    state->board[rand() % width][rand() % height].push_back(
+        new SolidTile{getSprite(state, 5, 0)});
   }
+
+  // spawner
+  state->board[width - 1][height - 1].push_back(
+      new BulletSpawnerTile<StraightBulletTile>(
+          getSprite(state, 10, 0), 5,
+          std::function{[](GameState* state, size_t x, size_t y) {
+            return new StraightBulletTile{getSprite(state, 6, 0), x, y, LEFT};
+          }}));
 }
 
 void handleEvent(GameState* state, sf::Event* event) {

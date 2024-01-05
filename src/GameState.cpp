@@ -3,8 +3,8 @@
 void moveBoard(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
-      for (Tile* tile : state->board[x][y]) {
-        tile->prepareMoveTile(state, x, y);
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        state->board[x][y][i]->prepareMove(state, x, y);
       }
     }
   }

@@ -20,8 +20,8 @@ class Tile {
   /// @return True if this tile has moved (and thus an iterator into board[x][y]
   /// would be invalidated)
   virtual bool update(GameState* state, size_t x, size_t y);
-  /// @brief Sets the next position this tile will move to
-  virtual void prepareMoveTile(GameState* state, size_t x, size_t y);
+  /// @brief Prepares actions that occur when a player moves
+  virtual void prepareMove(GameState* state, size_t x, size_t y);
   /// @brief Draws the tile at the given coordinates
   virtual void render(GameState* state, size_t x, size_t y);
   /// @brief the z order used during rendering

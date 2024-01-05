@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Tile.h"
 
 /// @brief Behaves the same as a Tile, but this one is solid
@@ -8,4 +10,5 @@ class SolidTile : public Tile {
 
   bool isSolidFor(GameState* state, size_t x, size_t y,
                   Tile* other) const override;
+  int getZLayer(GameState* state, size_t x, size_t y) const override;
 };

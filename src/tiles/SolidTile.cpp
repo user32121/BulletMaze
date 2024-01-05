@@ -6,3 +6,7 @@ bool SolidTile::isSolidFor(GameState* state, size_t x, size_t y,
                            Tile* other) const {
   return true;
 }
+
+int SolidTile::getZLayer(GameState* state, size_t x, size_t y) const {
+  return 5;
+}

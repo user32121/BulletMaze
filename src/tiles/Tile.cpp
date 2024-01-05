@@ -15,4 +15,4 @@ bool Tile::isSolidFor(GameState* state, size_t x, size_t y, Tile* other) const {
 
 bool Tile::update(GameState* state, size_t x, size_t y) { return false; }
 
-void Tile::prepareMoveTile(GameState* state, size_t x, size_t y) {}
+void Tile::prepareMove(GameState* state, size_t x, size_t y) {}
