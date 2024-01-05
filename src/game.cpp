@@ -2,42 +2,91 @@
 
 #include <SFML/Graphics.hpp>
 
-void loadResources(gameState* state) {
+#include "tiles/PlayerTile.h"
+#include "tiles/SolidTile.h"
+
+void loadResources(GameState* state) {
   state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
-  for (size_t i = 0; i < 4; i++) {
-    state->floorSprites[i].setTexture(state->spriteSheet);
-    state->floorSprites[i].setTextureRect(
-        {int(TILE_SIZE * i), 0, TILE_SIZE, TILE_SIZE});
+}
+
+void initialize(GameState* state) {
+  constexpr size_t width = 7;
+  constexpr size_t height = 5;
+
+  // floor
+  state->board.resize(7);
+  for (size_t x = 0; x < width; ++x) {
+    state->board[x].resize(height);
+    for (size_t y = 0; y < height; y++) {
+      state->board[x][y].push_back(
+          new Tile{{state->spriteSheet,
+                    {TILE_SIZE * (rand() % 4), 0, TILE_SIZE, TILE_SIZE}}});
+    }
+  }
+  // player
+  state->board[0][0].push_back(new PlayerTile{
+      {state->spriteSheet, {TILE_SIZE * 4, 0, TILE_SIZE, TILE_SIZE}}, 0, 0});
+
+  // random obstacles
+  for (size_t i = 0; i < 3; ++i) {
+    state->board[rand() % width][rand() % height].push_back(new SolidTile{
+        {state->spriteSheet, {TILE_SIZE * 5, 0, TILE_SIZE, TILE_SIZE}}});
   }
 }
 
-void initialize(gameState* state) {
-  std::vector<tile> floors;
-  for (size_t i = 0; i < 4; ++i) {
-    floors.push_back({state->floorSprites[i]});
+void handleEvent(GameState* state, sf::Event* event) {
+  switch (event->type) {
+    case sf::Event::Closed:
+      state->window->close();
+      break;
+    case sf::Event::KeyPressed:
+      state->input.presses.push(event->key.code);
+      break;
   }
-  state->board.resize(7);
-  for (size_t x = 0; x < 7; ++x) {
-    state->board[x].resize(5);
-    for (size_t y = 0; y < 5; y++) {
-      state->board[x][y].push_back(floors[rand() % 4]);
+}
+
+void update(GameState* state) {
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        bool moved = state->board[x][y][i]->update(state, x, y);
+        if (moved) {
+          --i;
+        }
+      }
     }
   }
 }
 
-void handleEvent(sf::RenderWindow* window, gameState* state, sf::Event* event) {
-  if (event->type == sf::Event::Closed) {
-    window->close();
+void render(GameState* state) {
+  // naive implementation of z ordering: collect all tiles and sort by z
+  std::vector<std::tuple<Tile*, size_t, size_t>> zOrderedTiles;
+
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        zOrderedTiles.push_back({state->board[x][y][i], x, y});
+      }
+    }
+  }
+  std::sort(zOrderedTiles.begin(), zOrderedTiles.end(),
+            [state](std::tuple<Tile*, size_t, size_t>& l,
+                    std::tuple<Tile*, size_t, size_t>& r) {
+              return std::get<0>(l)->getZLayer(state, std::get<1>(l),
+                                                std::get<2>(l)) <
+                     std::get<0>(r)->getZLayer(state, std::get<1>(r),
+                                                std::get<2>(r));
+            });
+  for (std::tuple<Tile*, size_t, size_t> tile : zOrderedTiles) {
+    std::get<0>(tile)->render(state, std::get<1>(tile), std::get<2>(tile));
   }
 }
 
-void update(sf::Clock* clock, gameState* state) {}
-
-void render(sf::RenderWindow* window, gameState* state) {
+void uninitialize(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
-      for (auto&& tile : state->board[x][y]) {
-        tile.render(window, x, y);
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        delete state->board[x][y][i];
       }
     }
   }
