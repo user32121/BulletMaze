@@ -40,7 +40,7 @@ bool PlayerTile::update(GameState* state, size_t x, size_t y) {
     // continue moving
     sf::Time t = state->clock->getElapsedTime();
     state->moveDelta = (t - startedMoving).asSeconds() / TOTAL_MOVE_DELTA;
-    if (state->moveDelta > 1) {
+    if (state->moveDelta > 1 || state->input.presses.size()) {
       state->moveDelta = 1;
       for (size_t i = 0; i < state->board[x][y].size(); ++i) {
         if (state->board[x][y][i] == this) {
