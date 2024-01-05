@@ -10,13 +10,19 @@ void moveBoard(GameState* state) {
   }
 }
 
-bool canMove(GameState* state, size_t x, size_t y, int vx, int vy) {
+bool canMove(GameState* state, size_t x, size_t y, int vx, int vy,
+             Tile* curTile) {
   size_t x2 = x + vx;
   size_t y2 = y + vy;
   // unsigned, so never negative
   if (x2 >= state->board.size() || y2 >= state->board[0].size()) {
     return false;
   }
-  // TODO check for obstacles
+  for (Tile* tile : state->board[x2][y2]) {
+    if (tile->isSolidFor(state, x2, y2, curTile)) {
+      return false;
+    }
+  }
+
   return true;
 }

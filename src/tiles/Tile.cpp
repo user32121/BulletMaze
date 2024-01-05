@@ -9,6 +9,10 @@ void Tile::render(GameState* state, size_t x, size_t y) {
 
 int Tile::getZLayer(GameState* state, size_t x, size_t y) const { return 0; }
 
+bool Tile::isSolidFor(GameState* state, size_t x, size_t y, Tile* other) const {
+  return false;
+}
+
 bool Tile::update(GameState* state, size_t x, size_t y) { return false; }
 
 void Tile::prepareMoveTile(GameState* state, size_t x, size_t y) {}

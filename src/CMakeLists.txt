@@ -4,4 +4,5 @@ target_sources(BulletMaze PRIVATE
     GameState.cpp
     tiles/Tile.cpp
     tiles/PlayerTile.cpp
+    tiles/SolidTile.cpp
 )

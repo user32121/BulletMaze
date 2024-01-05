@@ -28,4 +28,4 @@ struct GameState {
 void moveBoard(GameState* state);
 
 /// @brief checks if the position at (x+vx, y+vy) is in bounds and not blocked
-bool canMove(GameState* state, size_t x, size_t y, int vx, int vy);
+bool canMove(GameState* state, size_t x, size_t y, int vx, int vy, Tile* curTile);

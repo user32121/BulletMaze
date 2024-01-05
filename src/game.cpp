@@ -3,26 +3,35 @@
 #include <SFML/Graphics.hpp>
 
 #include "tiles/PlayerTile.h"
+#include "tiles/SolidTile.h"
 
 void loadResources(GameState* state) {
   state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
 }
 
 void initialize(GameState* state) {
+  constexpr size_t width = 7;
+  constexpr size_t height = 5;
+
   // floor
   state->board.resize(7);
-  for (size_t x = 0; x < 7; ++x) {
-    state->board[x].resize(5);
-    for (size_t y = 0; y < 5; y++) {
-      Tile* t = new Tile{{state->spriteSheet,
-                          {TILE_SIZE * (rand() % 4), 0, TILE_SIZE, TILE_SIZE}}};
-      state->board[x][y].push_back(t);
+  for (size_t x = 0; x < width; ++x) {
+    state->board[x].resize(height);
+    for (size_t y = 0; y < height; y++) {
+      state->board[x][y].push_back(
+          new Tile{{state->spriteSheet,
+                    {TILE_SIZE * (rand() % 4), 0, TILE_SIZE, TILE_SIZE}}});
     }
   }
   // player
-  Tile* t = new PlayerTile{
-      {state->spriteSheet, {TILE_SIZE * 4, 0, TILE_SIZE, TILE_SIZE}}, 0, 0};
-  state->board[0][0].push_back(t);
+  state->board[0][0].push_back(new PlayerTile{
+      {state->spriteSheet, {TILE_SIZE * 4, 0, TILE_SIZE, TILE_SIZE}}, 0, 0});
+
+  // random obstacles
+  for (size_t i = 0; i < 3; ++i) {
+    state->board[rand() % width][rand() % height].push_back(new SolidTile{
+        {state->spriteSheet, {TILE_SIZE * 5, 0, TILE_SIZE, TILE_SIZE}}});
+  }
 }
 
 void handleEvent(GameState* state, sf::Event* event) {

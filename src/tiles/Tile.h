@@ -24,7 +24,11 @@ class Tile {
   virtual void prepareMoveTile(GameState* state, size_t x, size_t y);
   /// @brief Draws the tile at the given coordinates
   virtual void render(GameState* state, size_t x, size_t y);
+  /// @brief the z order used during rendering
   virtual int getZLayer(GameState* state, size_t x, size_t y) const;
+  /// @brief True if other should treat this as an impassable tile
+  virtual bool isSolidFor(GameState* state, size_t x, size_t y,
+                          Tile* other) const;
 
  protected:
   sf::Sprite sprite;

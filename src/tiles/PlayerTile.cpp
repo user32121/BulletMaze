@@ -25,9 +25,9 @@ bool PlayerTile::update(GameState* state, size_t x, size_t y) {
           vy = 1;
           break;
       }
-      if (vx != 0 && canMove(state, moveToX, moveToY, vx, 0)) {
+      if (vx != 0 && canMove(state, moveToX, moveToY, vx, 0, this)) {
         moveToX = moveToX + vx;
-      } else if (vy != 0 && canMove(state, moveToX, moveToY, 0, vy)) {
+      } else if (vy != 0 && canMove(state, moveToX, moveToY, 0, vy, this)) {
         moveToY = moveToY + vy;
       } else {
         return false;
