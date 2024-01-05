@@ -2,17 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-struct GameState;
-#include "tiles/Tile.h"
-
-struct GameState {
-  sf::RenderWindow* window;
-  sf::Clock* clock;
-
-  sf::Texture spriteSheet;
-  sf::Sprite floorSprites[4];
-  std::vector<std::vector<std::vector<Tile>>> board;
-};
+#include "GameState.h"
 
 /// @brief Loads all resources needed by the game. Called before initialize().
 void loadResources(GameState* state);
@@ -24,3 +14,5 @@ void handleEvent(GameState* state, sf::Event* event);
 void update(GameState* state);
 /// @brief Performs rendering calls.
 void render(GameState* state);
+/// @brief Cleans up any resources used.
+void uninitialize(GameState* state);

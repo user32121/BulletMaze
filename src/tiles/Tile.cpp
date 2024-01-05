@@ -7,4 +7,8 @@ void Tile::render(GameState* state, size_t x, size_t y) {
   state->window->draw(sprite);
 }
 
-void Tile::update(GameState* state) {}
+int Tile::getZLayer(GameState* state, size_t x, size_t y) const { return 0; }
+
+bool Tile::update(GameState* state, size_t x, size_t y) { return false; }
+
+void Tile::prepareMoveTile(GameState* state, size_t x, size_t y) {}
