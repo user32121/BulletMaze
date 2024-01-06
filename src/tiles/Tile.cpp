@@ -2,17 +2,19 @@
 
 Tile::Tile(sf::Sprite sprite) : sprite{sprite} {}
 
-void Tile::render(GameState* state, size_t x, size_t y) {
-  sprite.setPosition(x * TILE_SIZE, y * TILE_SIZE);
+bool Tile::finishMove(GameState*, size_t, size_t, size_t) { return false; }
+
+void Tile::render(GameState* state, size_t x, size_t y, size_t) {
+  sprite.setPosition(float(x * TILE_SIZE), float(y * TILE_SIZE));
   state->window->draw(sprite);
 }
 
-int Tile::getZLayer(GameState* state, size_t x, size_t y) const { return 0; }
+int Tile::getZLayer(GameState*, size_t, size_t, size_t) const { return 0; }
 
-bool Tile::isSolidFor(GameState* state, size_t x, size_t y, Tile* other) const {
+bool Tile::isSolidFor(GameState*, size_t, size_t, size_t, Tile*) const {
   return false;
 }
 
-bool Tile::update(GameState* state, size_t x, size_t y) { return false; }
+void Tile::update(GameState*, size_t, size_t, size_t) {}
 
-void Tile::prepareMoveTile(GameState* state, size_t x, size_t y) {}
+void Tile::prepareMove(GameState*, size_t, size_t, size_t) {}

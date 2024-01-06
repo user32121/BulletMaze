@@ -1,10 +1,23 @@
 #include "GameState.h"
 
 void moveBoard(GameState* state) {
+  state->moveDelta = 0;
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
-      for (Tile* tile : state->board[x][y]) {
-        tile->prepareMoveTile(state, x, y);
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        state->board[x][y][i]->prepareMove(state, x, y, i);
+      }
+    }
+  }
+}
+
+void finishMoveBoard(GameState* state) {
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        if (state->board[x][y][i]->finishMove(state, x, y, i)) {
+          --i;
+        }
       }
     }
   }
@@ -18,8 +31,8 @@ bool canMove(GameState* state, size_t x, size_t y, int vx, int vy,
   if (x2 >= state->board.size() || y2 >= state->board[0].size()) {
     return false;
   }
-  for (Tile* tile : state->board[x2][y2]) {
-    if (tile->isSolidFor(state, x2, y2, curTile)) {
+  for (size_t i = 0; i < state->board[x2][y2].size(); ++i) {
+    if (state->board[x2][y2][i]->isSolidFor(state, x2, y2, i, curTile)) {
       return false;
     }
   }

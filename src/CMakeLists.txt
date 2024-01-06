@@ -5,4 +5,5 @@ target_sources(BulletMaze PRIVATE
     tiles/Tile.cpp
     tiles/PlayerTile.cpp
     tiles/SolidTile.cpp
+    tiles/StraightBulletTile.cpp
 )
