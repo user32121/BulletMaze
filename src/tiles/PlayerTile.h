@@ -4,8 +4,8 @@
 
 class PlayerTile : public Tile {
  private:
-  size_t moveToX = 0;
-  size_t moveToY = 0;
+  size_t moveToX;
+  size_t moveToY;
   sf::Time startedMoving;
 
  public:
