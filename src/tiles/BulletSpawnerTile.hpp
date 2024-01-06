@@ -12,14 +12,14 @@ inline BulletSpawnerTile<Bullet>::BulletSpawnerTile(
       spawner{spawn} {}
 
 template <typename Bullet>
-inline int BulletSpawnerTile<Bullet>::getZLayer(GameState *, size_t,
+inline int BulletSpawnerTile<Bullet>::getZLayer(GameState *, size_t, size_t,
                                                 size_t) const {
   return 10;
 }
 
 template <typename Bullet>
 inline void BulletSpawnerTile<Bullet>::prepareMove(GameState *state, size_t x,
-                                                   size_t y) {
+                                                   size_t y, size_t) {
   --spawnDelay;
   if (spawnDelay <= 0) {
     spawnDelay = spawnDelayMax;

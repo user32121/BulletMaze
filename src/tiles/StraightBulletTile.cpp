@@ -4,28 +4,24 @@ StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir)
     : Tile{sprite}, moveToX{x}, moveToY{y}, dir{dir} {}
 
-int StraightBulletTile::getZLayer(GameState*, size_t, size_t) const {
+int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
   return 20;
 }
 
 // TODO extract movement behavior to a dedicated function
-bool StraightBulletTile::update(GameState* state, size_t x, size_t y) {
-  if (state->moveDelta >= 1 && (moveToX != x || moveToY != y || collided)) {
-    for (size_t i = 0; i < state->board[x][y].size(); ++i) {
-      if (state->board[x][y][i] == this) {
-        if (!collided) {
-          state->board[moveToX][moveToY].push_back(this);
-        }
-        state->board[x][y].erase(state->board[x][y].begin() + i);
-        return true;
-      }
-    }
-    return true;
+bool StraightBulletTile::finishMove(GameState* state, size_t x, size_t y,
+                                    size_t i) {
+  if (moveToX == x && moveToY == y && !collided) {
+    return false;
   }
-  return false;
+  if (!collided) {
+    state->board[moveToX][moveToY].push_back(this);
+  }
+  state->board[x][y].erase(state->board[x][y].begin() + i);
+  return true;
 }
 
-void StraightBulletTile::prepareMove(GameState* state, size_t, size_t) {
+void StraightBulletTile::prepareMove(GameState* state, size_t, size_t, size_t) {
   int vx = 0;
   int vy = 0;
   switch (dir) {
@@ -50,7 +46,7 @@ void StraightBulletTile::prepareMove(GameState* state, size_t, size_t) {
   }
 }
 
-void StraightBulletTile::render(GameState* state, size_t x, size_t y) {
+void StraightBulletTile::render(GameState* state, size_t x, size_t y, size_t) {
   float delta = state->moveDelta;
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);

@@ -36,4 +36,12 @@ else()
   target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+if(ENABLE_ASAN)
+  if(MSVC)
+    target_compile_options(${TARGET_NAME} PRIVATE /fsanitize=address /D_DISABLE_VECTOR_ANNOTATION /D_DISABLE_STRING_ANNOTATION)
+  else()
+    target_compile_options(${TARGET_NAME} PRIVATE -fsanitize=address)
+  endif()
+endif()
+
 install(TARGETS ${TARGET_NAME})

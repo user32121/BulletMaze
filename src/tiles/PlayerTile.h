@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 
+/// @brief Contains logic for player movement
 class PlayerTile : public Tile {
  private:
   size_t moveToX;
@@ -11,7 +12,9 @@ class PlayerTile : public Tile {
  public:
   PlayerTile(sf::Sprite sprite, size_t x, size_t y);
 
-  bool update(GameState* state, size_t x, size_t y) override;
-  void render(GameState* state, size_t x, size_t y) override;
-  int getZLayer(GameState* state, size_t x, size_t y) const override;
+  void update(GameState* state, size_t x, size_t y, size_t i) override;
+  void render(GameState* state, size_t x, size_t y, size_t i) override;
+  int getZLayer(GameState* state, size_t x, size_t y, size_t i) const override;
+  void prepareMove(GameState* state, size_t x, size_t y, size_t i) override;
+  bool finishMove(GameState* state, size_t x, size_t y, size_t i) override;
 };

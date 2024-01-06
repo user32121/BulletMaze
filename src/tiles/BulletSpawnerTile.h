@@ -4,6 +4,7 @@
 
 #include "Tile.h"
 
+/// @brief Spawns a Bullet periodically
 template <typename Bullet>
 class BulletSpawnerTile : public Tile {
  private:
@@ -16,8 +17,8 @@ class BulletSpawnerTile : public Tile {
       sf::Sprite sprite, int spawnDelay,
       std::function<Bullet *(GameState *state, size_t x, size_t y)>);
 
-  int getZLayer(GameState *state, size_t x, size_t y) const override;
-  void prepareMove(GameState *state, size_t x, size_t y) override;
+  int getZLayer(GameState *state, size_t x, size_t y, size_t i) const override;
+  void prepareMove(GameState *state, size_t x, size_t y, size_t i) override;
 };
 
 #include "BulletSpawnerTile.hpp"

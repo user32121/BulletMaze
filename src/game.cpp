@@ -61,10 +61,7 @@ void update(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
       for (size_t i = 0; i < state->board[x][y].size(); ++i) {
-        bool moved = state->board[x][y][i]->update(state, x, y);
-        if (moved) {
-          --i;
-        }
+        state->board[x][y][i]->update(state, x, y, i);
       }
     }
   }
@@ -72,25 +69,26 @@ void update(GameState* state) {
 
 void render(GameState* state) {
   // naive implementation of z ordering: collect all tiles and sort by z
-  std::vector<std::tuple<Tile*, size_t, size_t>> zOrderedTiles;
+  std::vector<std::tuple<Tile*, size_t, size_t, size_t>> zOrderedTiles;
 
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
       for (size_t i = 0; i < state->board[x][y].size(); ++i) {
-        zOrderedTiles.push_back({state->board[x][y][i], x, y});
+        zOrderedTiles.push_back({state->board[x][y][i], x, y, i});
       }
     }
   }
   std::sort(zOrderedTiles.begin(), zOrderedTiles.end(),
-            [state](std::tuple<Tile*, size_t, size_t>& l,
-                    std::tuple<Tile*, size_t, size_t>& r) {
+            [state](std::tuple<Tile*, size_t, size_t, size_t>& l,
+                    std::tuple<Tile*, size_t, size_t, size_t>& r) {
               return std::get<0>(l)->getZLayer(state, std::get<1>(l),
-                                                std::get<2>(l)) <
+                                               std::get<2>(l), std::get<3>(l)) <
                      std::get<0>(r)->getZLayer(state, std::get<1>(r),
-                                                std::get<2>(r));
+                                               std::get<2>(r), std::get<3>(r));
             });
-  for (std::tuple<Tile*, size_t, size_t> tile : zOrderedTiles) {
-    std::get<0>(tile)->render(state, std::get<1>(tile), std::get<2>(tile));
+  for (std::tuple<Tile*, size_t, size_t, size_t> tile : zOrderedTiles) {
+    std::get<0>(tile)->render(state, std::get<1>(tile), std::get<2>(tile),
+                              std::get<3>(tile));
   }
 }
 

@@ -4,6 +4,7 @@
 
 enum DIRECTION { LEFT, RIGHT, UP, DOWN };
 
+/// @brief A bullet that moves in a straight line
 class StraightBulletTile : public Tile {
  private:
   DIRECTION dir;
@@ -14,8 +15,8 @@ class StraightBulletTile : public Tile {
  public:
   StraightBulletTile(sf::Sprite sprite, size_t x, size_t y, DIRECTION dir);
 
-  int getZLayer(GameState* state, size_t x, size_t y) const override;
-  bool update(GameState* state, size_t x, size_t y) override;
-  void prepareMove(GameState* state, size_t x, size_t y) override;
-  void render(GameState* state, size_t x, size_t y) override;
+  int getZLayer(GameState* state, size_t x, size_t y, size_t i) const override;
+  void prepareMove(GameState* state, size_t x, size_t y, size_t i) override;
+  bool finishMove(GameState* state, size_t x, size_t y, size_t i) override;
+  void render(GameState* state, size_t x, size_t y, size_t i) override;
 };
