@@ -4,11 +4,17 @@
 
 template <typename Bullet>
 inline BulletSpawnerTile<Bullet>::BulletSpawnerTile(
-    sf::Sprite sprite, int spawnDelay,
+    sf::Sprite sprite, int spawnPeriod,
+    std::function<Bullet *(GameState *state, size_t x, size_t y)> spawn)
+    : BulletSpawnerTile{sprite, spawnPeriod, 0, spawn} {}
+
+template <typename Bullet>
+inline BulletSpawnerTile<Bullet>::BulletSpawnerTile(
+    sf::Sprite sprite, int spawnPeriod, int initialSpawnDelay,
     std::function<Bullet *(GameState *state, size_t x, size_t y)> spawn)
     : Tile{sprite},
-      spawnDelayMax{spawnDelay},
-      spawnDelay{spawnDelay},
+      spawnDelayMax{spawnPeriod},
+      spawnDelay{initialSpawnDelay},
       spawner{spawn} {}
 
 template <typename Bullet>

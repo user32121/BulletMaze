@@ -14,8 +14,12 @@ class BulletSpawnerTile : public Tile {
 
  public:
   BulletSpawnerTile(
-      sf::Sprite sprite, int spawnDelay,
-      std::function<Bullet *(GameState *state, size_t x, size_t y)>);
+      sf::Sprite sprite, int spawnPeriod,
+      std::function<Bullet *(GameState *state, size_t x, size_t y)> spawn);
+
+  BulletSpawnerTile(
+      sf::Sprite sprite, int spawnPeriod, int initialSpawnDelay,
+      std::function<Bullet *(GameState *state, size_t x, size_t y)> spawn);
 
   int getZLayer(GameState *state, size_t x, size_t y, size_t i) const override;
   void prepareMove(GameState *state, size_t x, size_t y, size_t i) override;
