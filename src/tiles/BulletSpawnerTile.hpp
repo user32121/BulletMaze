@@ -12,8 +12,8 @@ inline BulletSpawnerTile<Bullet>::BulletSpawnerTile(
       spawner{spawn} {}
 
 template <typename Bullet>
-inline int BulletSpawnerTile<Bullet>::getZLayer(GameState *state, size_t x,
-                                                size_t y) const {
+inline int BulletSpawnerTile<Bullet>::getZLayer(GameState *, size_t,
+                                                size_t) const {
   return 10;
 }
 

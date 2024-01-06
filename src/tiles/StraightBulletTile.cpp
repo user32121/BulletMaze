@@ -4,7 +4,7 @@ StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir)
     : Tile{sprite}, moveToX{x}, moveToY{y}, dir{dir} {}
 
-int StraightBulletTile::getZLayer(GameState* state, size_t x, size_t y) const {
+int StraightBulletTile::getZLayer(GameState*, size_t, size_t) const {
   return 20;
 }
 
@@ -25,7 +25,7 @@ bool StraightBulletTile::update(GameState* state, size_t x, size_t y) {
   return false;
 }
 
-void StraightBulletTile::prepareMove(GameState* state, size_t x, size_t y) {
+void StraightBulletTile::prepareMove(GameState* state, size_t, size_t) {
   int vx = 0;
   int vy = 0;
   switch (dir) {

@@ -57,13 +57,11 @@ bool PlayerTile::update(GameState* state, size_t x, size_t y) {
 }
 
 void PlayerTile::render(GameState* state, size_t x, size_t y) {
-  float delta = (1 - cos(state->moveDelta * 3.14159)) / 2;
+  float delta = float((1 - cos(state->moveDelta * 3.14159)) / 2);
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
   sprite.setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
   state->window->draw(sprite);
 }
 
-int PlayerTile::getZLayer(GameState* state, size_t x, size_t y) const {
-  return 1000;
-}
+int PlayerTile::getZLayer(GameState*, size_t, size_t) const { return 1000; }
