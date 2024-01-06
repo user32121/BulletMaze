@@ -2,22 +2,23 @@
 
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir)
-    : Tile{sprite}, moveToX{x}, moveToY{y}, dir{dir} {}
+    : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y} {}
 
 int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
   return 20;
 }
 
-// TODO extract movement behavior to a dedicated function
 bool StraightBulletTile::finishMove(GameState* state, size_t x, size_t y,
                                     size_t i) {
   if (moveToX == x && moveToY == y && !collided) {
     return false;
   }
-  if (!collided) {
+  state->board[x][y].erase(state->board[x][y].begin() + i);
+  if (collided) {
+    delete this;
+  } else {
     state->board[moveToX][moveToY].push_back(this);
   }
-  state->board[x][y].erase(state->board[x][y].begin() + i);
   return true;
 }
 
