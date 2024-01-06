@@ -25,6 +25,9 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
         case sf::Keyboard::Down:
           vy = 1;
           break;
+        default:
+          // NO OP
+          break;
       }
       if ((vx != 0 || vy != 0) &&
           canMove(state, moveToX, moveToY, vx, vy, this)) {
@@ -74,6 +77,9 @@ void PlayerTile::prepareMove(GameState* state, size_t, size_t, size_t) {
       break;
     case sf::Keyboard::Down:
       vy = 1;
+      break;
+    default:
+      // NO OP
       break;
   }
   moveToX = moveToX + vx;

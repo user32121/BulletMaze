@@ -54,6 +54,9 @@ void handleEvent(GameState* state, sf::Event* event) {
     case sf::Event::KeyPressed:
       state->input.presses.push(event->key.code);
       break;
+    default:
+      // NO OP
+      break;
   }
 }
 
