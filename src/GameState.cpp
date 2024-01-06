@@ -24,7 +24,7 @@ void finishMoveBoard(GameState* state) {
 }
 
 int getBulletValueAt(GameState* state, size_t x, size_t y) {
-  int ret;
+  int ret = 0;
   for (size_t i = 0; i < state->board[x][y].size(); ++i) {
     ret += state->board[x][y][i]->getBulletValue(state, x, y, i);
   }

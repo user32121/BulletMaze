@@ -5,6 +5,14 @@
 PlayerTile::PlayerTile(sf::Sprite sprite, size_t x, size_t y)
     : Tile{sprite}, moveToX{x}, moveToY{y} {}
 
+void PlayerTile::checkAlive(GameState* state) {
+  // TODO safe range
+  if (getBulletValueAt(state, moveToX, moveToY) != 0) {
+    // TODO update state
+    puts("player died");
+  }
+}
+
 void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
   if (moveToX == x && moveToY == y) {
     if (state->input.presses.size()) {
@@ -44,6 +52,7 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
     if (state->moveDelta > 1 || state->input.presses.size()) {
       state->moveDelta = 1;
       finishMoveBoard(state);
+      checkAlive(state);
     }
   }
 }

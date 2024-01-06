@@ -9,6 +9,9 @@ class PlayerTile : public Tile {
   size_t moveToY;
   sf::Time startedMoving;
 
+  /// @brief Checks if the player's position is safe. If not, notifies the state
+  void checkAlive(GameState* state);
+
  public:
   PlayerTile(sf::Sprite sprite, size_t x, size_t y);
 
