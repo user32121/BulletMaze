@@ -12,16 +12,22 @@ struct Input {
 
 class Tile;
 struct GameState {
+  // pointers for program interaction
   sf::RenderWindow* window;
   sf::Clock* clock;
 
+  // resources
   sf::Texture spriteSheet;
 
+  // input and movement
   Input input;
   // value in [0,1] for interpolating movement
   float moveDelta = 0;
 
+  // game data
   std::vector<std::vector<std::vector<Tile*>>> board;
+  int safeRangeMin = 0;
+  int safeRangeMax = 0;
 };
 
 /// @brief checks if the position at (x+vx, y+vy) is in bounds and not blocked
