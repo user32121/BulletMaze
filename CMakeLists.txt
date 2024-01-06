@@ -41,6 +41,7 @@ if(ENABLE_ASAN)
     target_compile_options(${TARGET_NAME} PRIVATE /fsanitize=address /D_DISABLE_VECTOR_ANNOTATION /D_DISABLE_STRING_ANNOTATION)
   else()
     target_compile_options(${TARGET_NAME} PRIVATE -fsanitize=address)
+    target_link_options(${TARGET_NAME} PRIVATE -fsanitize=address)
   endif()
 endif()
 
