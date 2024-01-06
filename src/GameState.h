@@ -33,3 +33,6 @@ void moveBoard(GameState* state);
 
 /// @brief notifies all tiles to finish their move action
 void finishMoveBoard(GameState* state);
+
+/// @brief The sum of tile bullet values at a postiion
+int getBulletValueAt(GameState* state, size_t x, size_t y);

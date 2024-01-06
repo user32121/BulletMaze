@@ -1,8 +1,8 @@
 #include "StraightBulletTile.h"
 
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
-                                       DIRECTION dir)
-    : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y} {}
+                                       DIRECTION dir, int value)
+    : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
 
 int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
   return 20;
@@ -55,4 +55,9 @@ void StraightBulletTile::render(GameState* state, size_t x, size_t y, size_t) {
   sprite.setColor(
       sf::Color{255, 255, 255, sf::Uint8(collided ? 255 * (1 - delta) : 255)});
   state->window->draw(sprite);
+}
+
+int StraightBulletTile::getBulletValue(GameState*, size_t, size_t,
+                                       size_t) const {
+  return value;
 }
