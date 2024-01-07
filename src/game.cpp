@@ -37,13 +37,19 @@ void initialize(GameState* state) {
         new SolidTile{getSprite(state, 5, 0)});
   }
 
-  // spawner
+  // spawners
   state->board[width - 1][height - 1].push_back(
       new BulletSpawnerTile<StraightBulletTile>(
           getSprite(state, 10, 0), 5,
           std::function{[](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{getSprite(state, 6, 0), x, y, LEFT};
           }}));
+  state->board[width - 2][0].push_back(new BulletSpawnerTile<
+                                       StraightBulletTile>(
+      getSprite(state, 10, 0), 4, 2,
+      std::function{[](GameState* state, size_t x, size_t y) {
+        return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN, -1};
+      }}));
 }
 
 void handleEvent(GameState* state, sf::Event* event) {
@@ -53,6 +59,8 @@ void handleEvent(GameState* state, sf::Event* event) {
       break;
     case sf::Event::KeyPressed:
       state->input.presses.push(event->key.code);
+      // TODO R reset
+      // TODO Z undo
       break;
     default:
       // NO OP

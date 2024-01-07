@@ -10,6 +10,7 @@ void PlayerTile::checkAlive(GameState* state) {
   if (value < state->safeRangeMin || value > state->safeRangeMax) {
     // TODO update state
     puts("player died");
+    alive = false;
   }
 }
 
@@ -37,7 +38,7 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
           // NO OP
           break;
       }
-      if ((vx != 0 || vy != 0) &&
+      if (alive && (vx != 0 || vy != 0) &&
           canMove(state, moveToX, moveToY, vx, vy, this)) {
         moveBoard(state);
       } else {
@@ -58,6 +59,9 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
 }
 
 void PlayerTile::render(GameState* state, size_t x, size_t y, size_t) {
+  if (!alive) {
+    return;
+  }
   float delta = float((1 - cos(state->moveDelta * 3.14159)) / 2);
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
