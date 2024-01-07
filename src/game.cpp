@@ -11,6 +11,7 @@ void loadResources(GameState* state) {
   state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
 }
 
+// TODO programmatically generated texture atlas
 inline sf::Sprite getSprite(GameState* state, int x, int y) {
   return {state->spriteSheet,
           {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
@@ -29,7 +30,8 @@ void initialize(GameState* state) {
     }
   }
   // player
-  state->board[0][0].push_back(new PlayerTile{getSprite(state, 4, 0), 0, 0});
+  state->board[0][0].push_back(
+      new PlayerTile{getSprite(state, 4, 0), getSprite(state, 11, 0), 0, 0});
 
   // random obstacles
   for (size_t i = 0; i < 3; ++i) {

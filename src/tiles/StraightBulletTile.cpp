@@ -5,7 +5,7 @@ StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
     : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
 
 int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
-  return 20;
+  return 200;
 }
 
 bool StraightBulletTile::finishMove(GameState* state, size_t x, size_t y,
@@ -57,6 +57,7 @@ void StraightBulletTile::render(GameState* state, size_t x, size_t y, size_t) {
   state->window->draw(sprite);
 }
 
+// TODO render based on value
 int StraightBulletTile::getBulletValue(GameState*, size_t, size_t,
                                        size_t) const {
   return value;

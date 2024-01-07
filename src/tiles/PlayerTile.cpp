@@ -2,13 +2,13 @@
 
 #include <cmath>
 
-PlayerTile::PlayerTile(sf::Sprite sprite, size_t x, size_t y)
-    : Tile{sprite}, moveToX{x}, moveToY{y} {}
+PlayerTile::PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x,
+                       size_t y)
+    : Tile{sprite}, deathSprite{deathSprite}, moveToX{x}, moveToY{y} {}
 
 void PlayerTile::checkAlive(GameState* state) {
   int value = getBulletValueAt(state, moveToX, moveToY);
   if (value < state->safeRangeMin || value > state->safeRangeMax) {
-    // TODO update state
     puts("player died");
     alive = false;
   }
@@ -59,18 +59,16 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
 }
 
 void PlayerTile::render(GameState* state, size_t x, size_t y, size_t) {
-  if (!alive) {
-    return;
-  }
   float delta = float((1 - cos(state->moveDelta * 3.14159)) / 2);
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
-  sprite.setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
-  state->window->draw(sprite);
+  sf::Sprite* renderSprite = alive ? &sprite : &deathSprite;
+  renderSprite->setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
+  state->window->draw(*renderSprite);
 }
 
 int PlayerTile::getZLayer(GameState*, size_t, size_t, size_t) const {
-  return 1000;
+  return 100;
 }
 
 void PlayerTile::prepareMove(GameState* state, size_t, size_t, size_t) {
