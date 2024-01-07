@@ -17,7 +17,7 @@ inline sf::Sprite getSprite(GameState* state, int x, int y) {
           {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
 }
 
-void initialize(GameState* state) {
+void setupBoard(GameState* state) {
   constexpr size_t width = 7;
   constexpr size_t height = 5;
 
@@ -54,6 +54,19 @@ void initialize(GameState* state) {
       }}));
 }
 
+void clearBoard(GameState* state) {
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        delete state->board[x][y][i];
+      }
+      state->board[x][y].clear();
+    }
+  }
+}
+
+void initialize(GameState* state) { setupBoard(state); }
+
 void handleEvent(GameState* state, sf::Event* event) {
   switch (event->type) {
     case sf::Event::Closed:
@@ -61,7 +74,10 @@ void handleEvent(GameState* state, sf::Event* event) {
       break;
     case sf::Event::KeyPressed:
       state->input.presses.push(event->key.code);
-      // TODO R reset
+      if (event->key.code == sf::Keyboard::R) {
+        clearBoard(state);
+        setupBoard(state);
+      }
       // TODO Z undo
       break;
     default:
@@ -105,12 +121,4 @@ void render(GameState* state) {
   }
 }
 
-void uninitialize(GameState* state) {
-  for (size_t x = 0; x < state->board.size(); ++x) {
-    for (size_t y = 0; y < state->board[x].size(); ++y) {
-      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
-        delete state->board[x][y][i];
-      }
-    }
-  }
-}
+void uninitialize(GameState* state) { clearBoard(state); }
