@@ -64,18 +64,18 @@ void setupBoard(GameState* state) {
           std::function{[](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{getSprite(state, 6, 0), x, y, LEFT};
           }}));
-  state->board[0][height - 1].push_back(new BulletSpawnerTile<
-                                        StraightBulletTile>(
-      getSprite(state, 10, 0), 5,
-      std::function{[](GameState* state, size_t x, size_t y) {
-        return new StraightBulletTile{getSprite(state, 7, 0), x, y, RIGHT, -1};
-      }}));
-  state->board[width - 2][0].push_back(
+  state->board[0][height - 1].push_back(
       new BulletSpawnerTile<StraightBulletTile>(
-          getSprite(state, 10, 0), 4, 2,
+          getSprite(state, 10, 0), 5,
           std::function{[](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN};
+            return new StraightBulletTile{getSprite(state, 7, 0), x, y, RIGHT};
           }}));
+  state->board[width - 2][0].push_back(new BulletSpawnerTile<
+                                       StraightBulletTile>(
+      getSprite(state, 10, 0), 4, 2,
+      std::function{[](GameState* state, size_t x, size_t y) {
+        return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN, -1};
+      }}));
 }
 
 void clearBoard(GameState* state) {
@@ -121,7 +121,7 @@ void update(GameState* state) {
 }
 
 void render(GameState* state) {
-  state->bulletsRenderTexture.clear({0, 0, 0, 0});
+  state->bulletsRenderTexture.clear({0, 127, 0, 0});
 
   // naive implementation of z ordering: collect all tiles and sort by z
   std::vector<std::tuple<Tile*, size_t, size_t, size_t>> zOrderedTiles;

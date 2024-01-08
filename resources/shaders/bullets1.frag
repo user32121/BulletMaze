@@ -6,7 +6,7 @@
 
 //sprite to draw
 uniform sampler2D texture;
-//pixel buffer (assumed to be filled with (0,0,0,0))
+//pixel buffer (assumed to be filled with (0,127,0,0))
 //storage format is (brightness, bulletValue, undefined, alpha)
 uniform sampler2D target;
 
@@ -23,9 +23,9 @@ void main(){
     if(texturePix.a > 0){
         gl_FragColor.ra = max(targetPix.ra, texturePix.ra);
 
-        targetPix.y *= 10;
+        targetPix.y = targetPix.y * 255 - 127;
         gl_FragColor.y = targetPix.y + value;
-        gl_FragColor.y /= 10;
+        gl_FragColor.y = (gl_FragColor.y + 127) / 255;
     }else{
         gl_FragColor = targetPix;
     }

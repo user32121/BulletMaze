@@ -18,7 +18,7 @@ const vec4 cols[7] = {
 
 void main(){
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
-    pixel.y *= 10;
+    pixel.y = pixel.y * 255 - 127;
 
     gl_FragColor = pixel.xxxw * gl_Color * cols[int(round(clamp(pixel.y + 3, 0, 7)))];
 }

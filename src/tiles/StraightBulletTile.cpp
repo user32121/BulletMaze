@@ -63,7 +63,6 @@ void StraightBulletTile::render(GameState* state, size_t x, size_t y,
       sf::RenderStates{sf::BlendNone, {}, nullptr, &state->bulletsShader1});
 }
 
-// TODO render based on value
 int StraightBulletTile::getBulletValue(GameState*, size_t, size_t,
                                        size_t) const {
   return value;
