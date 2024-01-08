@@ -38,6 +38,10 @@ class Tile {
   virtual bool isSolidFor(GameState* state, size_t x, size_t y, size_t i,
                           Tile* other) const;
 
+  /// @brief The value used for calculating whether or not a coordinate is safe
+  virtual int getBulletValue(GameState* state, size_t x, size_t y,
+                             size_t i) const;
+
  protected:
   sf::Sprite sprite;
 };

@@ -1,11 +1,11 @@
 #include "StraightBulletTile.h"
 
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
-                                       DIRECTION dir)
-    : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y} {}
+                                       DIRECTION dir, int value)
+    : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
 
 int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
-  return 20;
+  return 200;
 }
 
 bool StraightBulletTile::finishMove(GameState* state, size_t x, size_t y,
@@ -47,12 +47,23 @@ void StraightBulletTile::prepareMove(GameState* state, size_t, size_t, size_t) {
   }
 }
 
-void StraightBulletTile::render(GameState* state, size_t x, size_t y, size_t) {
+void StraightBulletTile::render(GameState* state, size_t x, size_t y,
+                                size_t i) {
   float delta = state->moveDelta;
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
   sprite.setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
   sprite.setColor(
       sf::Color{255, 255, 255, sf::Uint8(collided ? 255 * (1 - delta) : 255)});
-  state->window->draw(sprite);
+
+  state->bulletsShader1.setUniform("value", getBulletValue(state, x, y, i));
+  state->bulletsRenderTexture.display();
+  state->bulletsRenderTexture.draw(
+      sprite,
+      sf::RenderStates{sf::BlendNone, {}, nullptr, &state->bulletsShader1});
+}
+
+int StraightBulletTile::getBulletValue(GameState*, size_t, size_t,
+                                       size_t) const {
+  return value;
 }

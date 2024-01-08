@@ -15,6 +15,8 @@ bool Tile::isSolidFor(GameState*, size_t, size_t, size_t, Tile*) const {
   return false;
 }
 
+int Tile::getBulletValue(GameState*, size_t, size_t, size_t) const { return 0; }
+
 void Tile::update(GameState*, size_t, size_t, size_t) {}
 
 void Tile::prepareMove(GameState*, size_t, size_t, size_t) {}

@@ -2,8 +2,16 @@
 
 #include <cmath>
 
-PlayerTile::PlayerTile(sf::Sprite sprite, size_t x, size_t y)
-    : Tile{sprite}, moveToX{x}, moveToY{y} {}
+PlayerTile::PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x,
+                       size_t y)
+    : Tile{sprite}, deathSprite{deathSprite}, moveToX{x}, moveToY{y} {}
+
+void PlayerTile::checkAlive(GameState* state) {
+  int value = getBulletValueAt(state, moveToX, moveToY);
+  if (value < state->safeRangeMin || value > state->safeRangeMax) {
+    alive = false;
+  }
+}
 
 void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
   if (moveToX == x && moveToY == y) {
@@ -29,7 +37,7 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
           // NO OP
           break;
       }
-      if ((vx != 0 || vy != 0) &&
+      if (alive && (vx != 0 || vy != 0) &&
           canMove(state, moveToX, moveToY, vx, vy, this)) {
         moveBoard(state);
       } else {
@@ -44,6 +52,7 @@ void PlayerTile::update(GameState* state, size_t x, size_t y, size_t) {
     if (state->moveDelta > 1 || state->input.presses.size()) {
       state->moveDelta = 1;
       finishMoveBoard(state);
+      checkAlive(state);
     }
   }
 }
@@ -52,12 +61,13 @@ void PlayerTile::render(GameState* state, size_t x, size_t y, size_t) {
   float delta = float((1 - cos(state->moveDelta * 3.14159)) / 2);
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
-  sprite.setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
-  state->window->draw(sprite);
+  sf::Sprite* renderSprite = alive ? &sprite : &deathSprite;
+  renderSprite->setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
+  state->window->draw(*renderSprite);
 }
 
 int PlayerTile::getZLayer(GameState*, size_t, size_t, size_t) const {
-  return 1000;
+  return 100;
 }
 
 void PlayerTile::prepareMove(GameState* state, size_t, size_t, size_t) {
