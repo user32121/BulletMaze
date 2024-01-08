@@ -18,6 +18,9 @@ struct GameState {
 
   // resources
   sf::Texture spriteSheet;
+  sf::Shader bulletShader;
+  // Sprite that covers the board. Used by shaders
+  sf::Sprite boardSprite;
 
   // input and movement
   Input input;

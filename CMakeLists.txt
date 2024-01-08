@@ -26,6 +26,7 @@ endif()
 
 add_custom_command(
     TARGET ${TARGET_NAME}
+    COMMENT "Copy resources"
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/resources
 )

@@ -7,19 +7,35 @@
 #include "tiles/SolidTile.h"
 #include "tiles/StraightBulletTile.h"
 
-void loadResources(GameState* state) {
-  state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
-}
-
 // TODO programmatically generated texture atlas
 inline sf::Sprite getSprite(GameState* state, int x, int y) {
   return {state->spriteSheet,
           {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
 }
 
+void loadResources(GameState* state) {
+  state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
+
+  if (!sf::Shader::isAvailable()) {
+    puts("Shaders are not available on this system");
+  }
+  state->bulletShader.loadFromFile("resources/shaders/bullets.vert",
+                                   "resources/shaders/bullets.frag");
+  state->bulletShader.setUniform("texture", sf::Shader::CurrentTexture);
+  state->bulletShader.setUniform("tileSize",
+                                 sf::Glsl::Ivec2{TILE_SIZE, TILE_SIZE});
+  sf::Vector2u textureSize = state->spriteSheet.getSize();
+  state->bulletShader.setUniform("textureSize",
+                                 sf::Glsl::Ivec2(textureSize.x, textureSize.y));
+  state->bulletShader.setUniform("bulletSpriteIdx", sf::Glsl::Ivec2(6, 0));
+  state->boardSprite = getSprite(state, 0, 0);
+}
+
 void setupBoard(GameState* state) {
   constexpr size_t width = 7;
   constexpr size_t height = 5;
+
+  state->boardSprite.setScale(width, height);
 
   // floor
   state->board.resize(7);
@@ -119,6 +135,8 @@ void render(GameState* state) {
     std::get<0>(tile)->render(state, std::get<1>(tile), std::get<2>(tile),
                               std::get<3>(tile));
   }
+
+  state->window->draw(state->boardSprite, &state->bulletShader);
 }
 
 void uninitialize(GameState* state) { clearBoard(state); }

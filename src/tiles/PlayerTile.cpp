@@ -9,7 +9,6 @@ PlayerTile::PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x,
 void PlayerTile::checkAlive(GameState* state) {
   int value = getBulletValueAt(state, moveToX, moveToY);
   if (value < state->safeRangeMin || value > state->safeRangeMax) {
-    puts("player died");
     alive = false;
   }
 }
