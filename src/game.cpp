@@ -23,18 +23,8 @@ void loadResources(GameState* state) {
                                      "resources/shaders/bullets1.frag");
   state->bulletsShader2.loadFromFile("resources/shaders/bullets2.frag",
                                      sf::Shader::Fragment);
-  state->testShader.loadFromFile("resources/shaders/test.frag",
-                                 sf::Shader::Fragment);
   state->bulletsShader1.setUniform("texture", sf::Shader::CurrentTexture);
   state->bulletsShader2.setUniform("texture", sf::Shader::CurrentTexture);
-  state->testRenderTexture.create(100, 100);
-  state->testRenderTexture2.create(100, 100);
-  state->testRenderTexture.clear({1, 0, 0, 255});
-  state->testRenderTexture2.clear({0, 1, 0, 255});
-  // state->testShader.setUniform("texture",
-  //                              state->testRenderTexture.getTexture());
-  // state->testShader.setUniform("texture2",
-  //                              state->testRenderTexture2.getTexture());
 }
 
 void setupBoard(GameState* state) {
@@ -160,22 +150,6 @@ void render(GameState* state) {
   state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
                                   true);
   state->window->draw(state->bulletsSprite, &state->bulletsShader2);
-
-  // TODO experiment with drawing as input and output in separate shader
-  state->testRenderTexture.display();
-  state->testRenderTexture2.display();
-  // state->testShader.setUniform("texture",
-  //                              state->testRenderTexture.getTexture());
-  state->testShader.setUniform("texture", sf::Shader::CurrentTexture);
-  state->testShader.setUniform("texture2",
-                               state->testRenderTexture2.getTexture());
-  state->testRenderTexture2.draw(
-      sf::Sprite{state->testRenderTexture.getTexture()},
-      {sf::BlendNone, {}, nullptr, &state->testShader});
-  state->testRenderTexture2.display();
-  sf::Sprite testSprite{state->testRenderTexture2.getTexture()};
-  testSprite.setPosition(100, 100);
-  state->window->draw(testSprite);
 }
 
 void uninitialize(GameState* state) { clearBoard(state); }

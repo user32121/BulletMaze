@@ -22,10 +22,6 @@ struct GameState {
   sf::Shader bulletsShader2;
   sf::RenderTexture bulletsRenderTexture;
   sf::Sprite bulletsSprite;
-  // TODO clean up
-  sf::Shader testShader;
-  sf::RenderTexture testRenderTexture;
-  sf::RenderTexture testRenderTexture2;
 
   // input and movement
   Input input;
