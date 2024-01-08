@@ -58,12 +58,9 @@ void StraightBulletTile::render(GameState* state, size_t x, size_t y,
 
   state->bulletsShader1.setUniform("value", getBulletValue(state, x, y, i));
   state->bulletsRenderTexture.display();
-  state->bulletsShader1.setUniform("target",
-                                   state->bulletsRenderTexture.getTexture());
   state->bulletsRenderTexture.draw(
       sprite,
       sf::RenderStates{sf::BlendNone, {}, nullptr, &state->bulletsShader1});
-  state->bulletsRenderTexture.display();
 }
 
 // TODO render based on value

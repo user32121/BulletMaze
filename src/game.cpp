@@ -147,8 +147,6 @@ void render(GameState* state) {
   }
 
   state->bulletsRenderTexture.display();
-  state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
-                                  true);
   state->window->draw(state->bulletsSprite, &state->bulletsShader2);
 }
 

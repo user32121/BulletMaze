@@ -18,23 +18,7 @@ const vec4 cols[7] = {
 
 void main(){
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
-    pixel.yz *= 10;
+    pixel.y *= 10;
 
     gl_FragColor = pixel.xxxw * gl_Color * cols[int(round(clamp(pixel.y + 3, 0, 7)))];
-    
-    /*if(pixel.z > 0 && pixel.z < 0.3){
-        gl_FragColor = vec4(1,0,0,1);
-    }
-    if(pixel.z > 0.3 && pixel.z < 0.5){
-        gl_FragColor = vec4(1,0,1,1);
-    }
-    if(pixel.z > 0.5 && pixel.z < 0.7){
-        gl_FragColor = vec4(0,0,1,1);
-    }
-    if(pixel.z > 0.7 && pixel.z < 0.9){
-        gl_FragColor = vec4(0,1,1,1);
-    }
-    if(pixel.z > 0.9 && pixel.z < 1){
-        gl_FragColor = vec4(0,1,0,1);
-    }*/
 }
