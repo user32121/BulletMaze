@@ -1,14 +1,14 @@
-#version 110
+#version 130
 
-out vec4 pos;
+uniform vec2 boardSize;  //in pixels
+
+out vec2 boardPos;
 
 void main()
 {
-    // default behavior
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
     gl_FrontColor = gl_Color;
-    
-    //transfer world coordinates
-    pos = gl_Vertex;
+    boardPos = gl_Vertex.xy / boardSize;
+    boardPos.y = 1 - boardPos.y;
 }

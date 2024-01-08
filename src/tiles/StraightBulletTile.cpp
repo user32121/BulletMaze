@@ -47,14 +47,23 @@ void StraightBulletTile::prepareMove(GameState* state, size_t, size_t, size_t) {
   }
 }
 
-void StraightBulletTile::render(GameState* state, size_t x, size_t y, size_t) {
+void StraightBulletTile::render(GameState* state, size_t x, size_t y,
+                                size_t i) {
   float delta = state->moveDelta;
   float interX = (x * (1 - delta) + moveToX * delta);
   float interY = (y * (1 - delta) + moveToY * delta);
   sprite.setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
   sprite.setColor(
       sf::Color{255, 255, 255, sf::Uint8(collided ? 255 * (1 - delta) : 255)});
-  state->window->draw(sprite);
+
+  state->bulletsShader1.setUniform("value", getBulletValue(state, x, y, i));
+  state->bulletsRenderTexture.display();
+  state->bulletsShader1.setUniform("target",
+                                   state->bulletsRenderTexture.getTexture());
+  state->bulletsRenderTexture.draw(
+      sprite,
+      sf::RenderStates{sf::BlendNone, {}, nullptr, &state->bulletsShader1});
+  state->bulletsRenderTexture.display();
 }
 
 // TODO render based on value

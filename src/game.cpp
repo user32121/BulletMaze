@@ -19,23 +19,35 @@ void loadResources(GameState* state) {
   if (!sf::Shader::isAvailable()) {
     puts("Shaders are not available on this system");
   }
-  state->bulletShader.loadFromFile("resources/shaders/bullets.vert",
-                                   "resources/shaders/bullets.frag");
-  state->bulletShader.setUniform("texture", sf::Shader::CurrentTexture);
-  state->bulletShader.setUniform("tileSize",
-                                 sf::Glsl::Ivec2{TILE_SIZE, TILE_SIZE});
-  sf::Vector2u textureSize = state->spriteSheet.getSize();
-  state->bulletShader.setUniform("textureSize",
-                                 sf::Glsl::Ivec2(textureSize.x, textureSize.y));
-  state->bulletShader.setUniform("bulletSpriteIdx", sf::Glsl::Ivec2(6, 0));
-  state->boardSprite = getSprite(state, 0, 0);
+  state->bulletsShader1.loadFromFile("resources/shaders/bullets1.vert",
+                                     "resources/shaders/bullets1.frag");
+  state->bulletsShader2.loadFromFile("resources/shaders/bullets2.frag",
+                                     sf::Shader::Fragment);
+  state->testShader.loadFromFile("resources/shaders/test.frag",
+                                 sf::Shader::Fragment);
+  state->bulletsShader1.setUniform("texture", sf::Shader::CurrentTexture);
+  state->bulletsShader2.setUniform("texture", sf::Shader::CurrentTexture);
+  state->testRenderTexture.create(100, 100);
+  state->testRenderTexture2.create(100, 100);
+  state->testRenderTexture.clear({1, 0, 0, 255});
+  state->testRenderTexture2.clear({0, 1, 0, 255});
+  // state->testShader.setUniform("texture",
+  //                              state->testRenderTexture.getTexture());
+  // state->testShader.setUniform("texture2",
+  //                              state->testRenderTexture2.getTexture());
 }
 
 void setupBoard(GameState* state) {
   constexpr size_t width = 7;
   constexpr size_t height = 5;
 
-  state->boardSprite.setScale(width, height);
+  state->bulletsRenderTexture.create(width * TILE_SIZE, height * TILE_SIZE);
+  state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
+                                  true);
+  state->bulletsShader1.setUniform("target",
+                                   state->bulletsRenderTexture.getTexture());
+  state->bulletsShader1.setUniform(
+      "boardSize", sf::Glsl::Vec2{width * TILE_SIZE, height * TILE_SIZE});
 
   // floor
   state->board.resize(7);
@@ -62,12 +74,18 @@ void setupBoard(GameState* state) {
           std::function{[](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{getSprite(state, 6, 0), x, y, LEFT};
           }}));
-  state->board[width - 2][0].push_back(new BulletSpawnerTile<
-                                       StraightBulletTile>(
-      getSprite(state, 10, 0), 4, 2,
+  state->board[0][height - 1].push_back(new BulletSpawnerTile<
+                                        StraightBulletTile>(
+      getSprite(state, 10, 0), 5,
       std::function{[](GameState* state, size_t x, size_t y) {
-        return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN, -1};
+        return new StraightBulletTile{getSprite(state, 7, 0), x, y, RIGHT, -1};
       }}));
+  state->board[width - 2][0].push_back(
+      new BulletSpawnerTile<StraightBulletTile>(
+          getSprite(state, 10, 0), 4, 2,
+          std::function{[](GameState* state, size_t x, size_t y) {
+            return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN};
+          }}));
 }
 
 void clearBoard(GameState* state) {
@@ -113,6 +131,8 @@ void update(GameState* state) {
 }
 
 void render(GameState* state) {
+  state->bulletsRenderTexture.clear({0, 0, 0, 0});
+
   // naive implementation of z ordering: collect all tiles and sort by z
   std::vector<std::tuple<Tile*, size_t, size_t, size_t>> zOrderedTiles;
 
@@ -136,7 +156,26 @@ void render(GameState* state) {
                               std::get<3>(tile));
   }
 
-  state->window->draw(state->boardSprite, &state->bulletShader);
+  state->bulletsRenderTexture.display();
+  state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
+                                  true);
+  state->window->draw(state->bulletsSprite, &state->bulletsShader2);
+
+  // TODO experiment with drawing as input and output in separate shader
+  state->testRenderTexture.display();
+  state->testRenderTexture2.display();
+  // state->testShader.setUniform("texture",
+  //                              state->testRenderTexture.getTexture());
+  state->testShader.setUniform("texture", sf::Shader::CurrentTexture);
+  state->testShader.setUniform("texture2",
+                               state->testRenderTexture2.getTexture());
+  state->testRenderTexture2.draw(
+      sf::Sprite{state->testRenderTexture.getTexture()},
+      {sf::BlendNone, {}, nullptr, &state->testShader});
+  state->testRenderTexture2.display();
+  sf::Sprite testSprite{state->testRenderTexture2.getTexture()};
+  testSprite.setPosition(100, 100);
+  state->window->draw(testSprite);
 }
 
 void uninitialize(GameState* state) { clearBoard(state); }
