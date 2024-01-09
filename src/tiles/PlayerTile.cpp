@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "../TextureManager.h"
+
 PlayerTile::PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x,
                        size_t y)
     : Tile{sprite}, deathSprite{deathSprite}, moveToX{x}, moveToY{y} {}

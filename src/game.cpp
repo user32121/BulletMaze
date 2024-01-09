@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "TextureManager.h"
 #include "tiles/BulletSpawnerTile.h"
 #include "tiles/PlayerTile.h"
 #include "tiles/SolidTile.h"
@@ -10,7 +11,7 @@
 // TODO programmatically generated texture atlas
 inline sf::Sprite getSprite(GameState* state, int x, int y) {
   return {state->spriteSheet,
-          {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
+          sf::IntRect(TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE)};
 }
 
 void loadResources(GameState* state) {
