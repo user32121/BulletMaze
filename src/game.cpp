@@ -105,6 +105,10 @@ void handleEvent(GameState* state, sf::Event* event) {
         setupBoard(state);
       }
       // TODO Z undo
+
+      if (event->key.code == sf::Keyboard::Q) {
+        state->textureManager.loadTexture("resources/textures/player.png");
+      }
       break;
     default:
       // NO OP
@@ -150,6 +154,10 @@ void render(GameState* state) {
 
   state->bulletsRenderTexture.display();
   state->window->draw(state->bulletsSprite, &state->bulletsShader2);
+
+  sf::Sprite managerSprite{state->textureManager.spriteSheet.getTexture()};
+  managerSprite.setPosition(100, 100);
+  state->window->draw(managerSprite);
 }
 
 void uninitialize(GameState* state) { clearBoard(state); }

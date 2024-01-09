@@ -2,6 +2,7 @@
 
 #include <queue>
 
+#include "TextureManager.h"
 #include "tiles/Tile.h"
 
 #define TOTAL_MOVE_DELTA 0.15f
