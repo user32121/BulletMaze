@@ -10,7 +10,6 @@
 /// Assumes all textures are of size TILE_SIZE
 class TextureManager {
  private:
- public:  // TODO remove
   sf::RenderTexture spriteSheet;
   std::map<std::string, sf::Vector2u> locations;  // in pixels
   size_t size = 0;

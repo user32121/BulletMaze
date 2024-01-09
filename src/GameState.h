@@ -18,8 +18,6 @@ struct GameState {
   sf::Clock* clock;
 
   // resources
-  sf::Texture spriteSheet;
-  // TODO test by drawing spritesheet
   TextureManager textureManager;
   sf::Shader bulletsShader1;
   sf::Shader bulletsShader2;
