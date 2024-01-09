@@ -27,6 +27,7 @@ void loadResources(GameState* state) {
   state->bulletsShader2.setUniform("texture", sf::Shader::CurrentTexture);
 }
 
+// TODO selecting different levels
 void setupBoard(GameState* state) {
   constexpr size_t width = 7;
   constexpr size_t height = 5;
