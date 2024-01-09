@@ -2,6 +2,7 @@
 
 #include <queue>
 
+#include "TextureManager.h"
 #include "tiles/Tile.h"
 
 #define TOTAL_MOVE_DELTA 0.15f
@@ -17,7 +18,7 @@ struct GameState {
   sf::Clock* clock;
 
   // resources
-  sf::Texture spriteSheet;
+  TextureManager textureManager;
   sf::Shader bulletsShader1;
   sf::Shader bulletsShader2;
   sf::RenderTexture bulletsRenderTexture;

@@ -2,20 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "TextureManager.h"
 #include "tiles/BulletSpawnerTile.h"
 #include "tiles/PlayerTile.h"
 #include "tiles/SolidTile.h"
 #include "tiles/StraightBulletTile.h"
 
-// TODO programmatically generated texture atlas
-inline sf::Sprite getSprite(GameState* state, int x, int y) {
-  return {state->spriteSheet,
-          {TILE_SIZE * x, TILE_SIZE * y, TILE_SIZE, TILE_SIZE}};
-}
-
 void loadResources(GameState* state) {
-  state->spriteSheet.loadFromFile("resources/SpriteSheet.png");
-
   if (!sf::Shader::isAvailable()) {
     puts("Shaders are not available on this system");
   }
@@ -27,6 +20,7 @@ void loadResources(GameState* state) {
   state->bulletsShader2.setUniform("texture", sf::Shader::CurrentTexture);
 }
 
+// TODO selecting different levels
 void setupBoard(GameState* state) {
   constexpr size_t width = 7;
   constexpr size_t height = 5;
@@ -40,42 +34,57 @@ void setupBoard(GameState* state) {
       "boardSize", sf::Glsl::Vec2{width * TILE_SIZE, height * TILE_SIZE});
 
   // floor
+  static std::string floorTextures[4] = {
+      "resources/textures/floor0.png",
+      "resources/textures/floor1.png",
+      "resources/textures/floor2.png",
+      "resources/textures/floor3.png",
+  };
   state->board.resize(7);
   for (size_t x = 0; x < width; ++x) {
     state->board[x].resize(height);
     for (size_t y = 0; y < height; y++) {
-      state->board[x][y].push_back(new Tile{getSprite(state, rand() % 4, 0)});
+      state->board[x][y].push_back(
+          new Tile{state->textureManager.getSprite(floorTextures[rand() % 4])});
     }
   }
   // player
-  state->board[0][0].push_back(
-      new PlayerTile{getSprite(state, 4, 0), getSprite(state, 11, 0), 0, 0});
+  state->board[0][0].push_back(new PlayerTile{
+      state->textureManager.getSprite("resources/textures/player.png"),
+      state->textureManager.getSprite("resources/textures/playerDead.png"), 0,
+      0});
 
   // random obstacles
   for (size_t i = 0; i < 3; ++i) {
-    state->board[rand() % width][rand() % height].push_back(
-        new SolidTile{getSprite(state, 5, 0)});
+    state->board[rand() % width][rand() % height].push_back(new SolidTile{
+        state->textureManager.getSprite("resources/textures/obstacle.png")});
   }
 
   // spawners
   state->board[width - 1][height - 1].push_back(
       new BulletSpawnerTile<StraightBulletTile>(
-          getSprite(state, 10, 0), 5,
+          state->textureManager.getSprite("resources/textures/spawner.png"), 5,
           std::function{[](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{getSprite(state, 6, 0), x, y, LEFT};
+            return new StraightBulletTile{state->textureManager.getSprite(
+                                              "resources/textures/bulletL.png"),
+                                          x, y, LEFT};
           }}));
   state->board[0][height - 1].push_back(
       new BulletSpawnerTile<StraightBulletTile>(
-          getSprite(state, 10, 0), 5,
+          state->textureManager.getSprite("resources/textures/spawner.png"), 5,
           std::function{[](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{getSprite(state, 7, 0), x, y, RIGHT};
+            return new StraightBulletTile{state->textureManager.getSprite(
+                                              "resources/textures/bulletR.png"),
+                                          x, y, RIGHT};
           }}));
-  state->board[width - 2][0].push_back(new BulletSpawnerTile<
-                                       StraightBulletTile>(
-      getSprite(state, 10, 0), 4, 2,
-      std::function{[](GameState* state, size_t x, size_t y) {
-        return new StraightBulletTile{getSprite(state, 9, 0), x, y, DOWN, -1};
-      }}));
+  state->board[width - 2][0].push_back(
+      new BulletSpawnerTile<StraightBulletTile>(
+          state->textureManager.getSprite("resources/textures/spawner.png"), 4,
+          2, std::function{[](GameState* state, size_t x, size_t y) {
+            return new StraightBulletTile{state->textureManager.getSprite(
+                                              "resources/textures/bulletD.png"),
+                                          x, y, DOWN, -1};
+          }}));
 }
 
 void clearBoard(GameState* state) {

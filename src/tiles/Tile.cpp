@@ -1,5 +1,7 @@
 #include "Tile.h"
 
+#include "../TextureManager.h"
+
 Tile::Tile(sf::Sprite sprite) : sprite{sprite} {}
 
 bool Tile::finishMove(GameState*, size_t, size_t, size_t) { return false; }

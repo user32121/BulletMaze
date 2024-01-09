@@ -4,8 +4,6 @@
 
 #include "../GameState.h"
 
-#define TILE_SIZE 64
-
 struct GameState;
 /// @brief Basic tile representing a stationary object on the board.
 class Tile {

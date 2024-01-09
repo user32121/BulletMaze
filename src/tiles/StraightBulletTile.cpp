@@ -1,5 +1,7 @@
 #include "StraightBulletTile.h"
 
+#include "../TextureManager.h"
+
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir, int value)
     : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
