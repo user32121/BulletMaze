@@ -1,5 +1,7 @@
 #include "TextureManager.h"
 
+#include <intrin.h>
+
 void TextureManager::increaseSize() {
   sf::Vector2u spriteSheetSize = spriteSheet.getSize();
   sf::RenderTexture temp;
@@ -31,18 +33,15 @@ sf::Sprite TextureManager::getSprite(const std::string& filename) {
                     sf::IntRect(pos.x, pos.y, TILE_SIZE, TILE_SIZE)};
 }
 
+/// @brief images are packed such that the even and odd bits can be extracted
+/// for x and y respectively <br>
+// 0 1 4 5 <br>
+// 2 3 6 7 <br>
+// 8 9 C D <br>
+// A B E F <br>
 sf::Vector2u posAtIndex(size_t i) {
-  // TODO O(1) (ASM) de-interleave
-  unsigned int x = 0;
-  unsigned int y = 0;
-  unsigned int bit = 1;
-  while (i) {
-    x |= i & bit;
-    y |= (i & (bit << 1)) >> 1;
-    bit <<= 1;
-    i >>= 1;
-  }
-  return {x, y};
+  return {(unsigned int)_pext_u64(i, 0x5555555555555555U),
+          (unsigned int)_pext_u64(i, 0xAAAAAAAAAAAAAAAAU)};
 }
 
 void TextureManager::loadTexture(const std::string& filename) {
