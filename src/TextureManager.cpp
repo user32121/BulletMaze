@@ -32,17 +32,20 @@ sf::Sprite TextureManager::getSprite(const std::string& filename) {
 }
 
 sf::Vector2u posAtIndex(size_t i) {
-  // TODO O(1) (ASM) de-interleave
-  unsigned int x = 0;
-  unsigned int y = 0;
-  unsigned int bit = 1;
-  while (i) {
-    x |= i & bit;
-    y |= (i & (bit << 1)) >> 1;
-    bit <<= 1;
-    i >>= 1;
-  }
-  return {x, y};
+  // de-interleave, x and y should take the even and odd bits, respectively
+  size_t x = i & 0x5555555555555555U;
+  size_t y = (i & 0xAAAAAAAAAAAAAAAAU) >> 1;
+  x = (x | (x >> 1)) & 0x3333333333333333U;
+  x = (x | (x >> 2)) & 0x0F0F0F0F0F0F0F0FU;
+  x = (x | (x >> 4)) & 0x00FF00FF00FF00FFU;
+  x = (x | (x >> 8)) & 0x0000FFFF0000FFFFU;
+  x = (x | (x >> 16)) & 0x00000000FFFFFFFFU;
+  y = (y | (y >> 1)) & 0x3333333333333333U;
+  y = (y | (y >> 2)) & 0x0F0F0F0F0F0F0F0FU;
+  y = (y | (y >> 4)) & 0x00FF00FF00FF00FFU;
+  y = (y | (y >> 8)) & 0x0000FFFF0000FFFFU;
+  y = (y | (y >> 16)) & 0x00000000FFFFFFFFU;
+  return {(unsigned int)x, (unsigned int)y};
 }
 
 void TextureManager::loadTexture(const std::string& filename) {
