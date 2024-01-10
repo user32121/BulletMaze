@@ -22,6 +22,8 @@ void loadResources(GameState* state) {
 
 // TODO selecting different levels
 void setupBoard(GameState* state) {
+  srand(1);
+
   constexpr size_t width = 7;
   constexpr size_t height = 5;
 
@@ -85,6 +87,8 @@ void setupBoard(GameState* state) {
                                               "resources/textures/bulletD.png"),
                                           x, y, DOWN, -1};
           }}));
+
+  state->history.clear();
 }
 
 void clearBoard(GameState* state) {
@@ -100,6 +104,25 @@ void clearBoard(GameState* state) {
 
 void initialize(GameState* state) { setupBoard(state); }
 
+void undoBoard(GameState* state) {
+  if (state->history.empty()) {
+    return;
+  }
+  clearBoard(state);
+  state->board.resize(state->history.back().size());
+  for (size_t x = 0; x < state->history.back().size(); ++x) {
+    state->board[x].resize(state->history.back()[x].size());
+    for (size_t y = 0; y < state->history.back()[x].size(); ++y) {
+      state->board[x][y].resize(state->history.back()[x][y].size());
+      for (size_t i = 0; i < state->history.back()[x][y].size(); ++i) {
+        state->board[x][y][i] = state->history.back()[x][y][i].restore(
+            state, x, y, i, &state->history.back()[x][y][i].data);
+      }
+    }
+  }
+  state->history.pop_back();
+}
+
 void handleEvent(GameState* state, sf::Event* event) {
   switch (event->type) {
     case sf::Event::Closed:
@@ -112,6 +135,9 @@ void handleEvent(GameState* state, sf::Event* event) {
         setupBoard(state);
       }
       // TODO Z undo
+      if (event->key.code == sf::Keyboard::Z) {
+        undoBoard(state);
+      }
       break;
     default:
       // NO OP

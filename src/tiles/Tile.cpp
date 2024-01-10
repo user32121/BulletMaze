@@ -19,6 +19,15 @@ bool Tile::isSolidFor(GameState*, size_t, size_t, size_t, Tile*) const {
 
 int Tile::getBulletValue(GameState*, size_t, size_t, size_t) const { return 0; }
 
+SerializedTile Tile::serialize() const {
+  return SerializedTile{restore, sprite.getTextureRect().getPosition()};
+}
+
+Tile *Tile::restore(GameState *state, size_t, size_t, size_t,
+                    SerializedTileData *data) {
+  return new Tile{state->textureManager.getSprite(data->texturePos)};
+}
+
 void Tile::update(GameState*, size_t, size_t, size_t) {}
 
 void Tile::prepareMove(GameState*, size_t, size_t, size_t) {}
