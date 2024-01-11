@@ -6,15 +6,15 @@
 uniform sampler2D texture;
 
 //colors corresponding to bullet values (centered at 3)
-const vec4 cols[7] = {
-    {0, 1, 1, 1},
-    {0, 0, 1, 1},
-    {0.5, 0, 1, 1},
-    {1, 1, 1, 0.5},
-    {1, 0, 0, 1},
-    {1, 0.5, 0, 1},
-    {1, 1, 0, 1},
-};
+const vec4 cols[7] = vec4[7](
+    vec4(0, 1, 1, 1),
+    vec4(0, 0, 1, 1),
+    vec4(0.5, 0, 1, 1),
+    vec4(1, 1, 1, 0.5),
+    vec4(1, 0, 0, 1),
+    vec4(1, 0.5, 0, 1),
+    vec4(1, 1, 0, 1)
+);
 
 void main(){
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
