@@ -31,6 +31,7 @@ struct GameState {
   float moveDelta = 0;
 
   // game data
+  std::string curLevel;
   std::vector<std::vector<std::vector<Tile*>>> board;
   int safeRangeMin = 0;
   int safeRangeMax = 0;

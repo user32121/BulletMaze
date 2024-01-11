@@ -1,7 +1,10 @@
 #include "game.h"
 
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
+#define JSON_ImplicitConversions 0
+#include "../libs/nlohmann/json.hpp"
 #include "TextureManager.h"
 #include "tiles/BulletSpawnerTile.h"
 #include "tiles/PlayerTile.h"
@@ -22,18 +25,25 @@ void loadResources(GameState* state) {
 
 // TODO selecting different levels
 void setupBoard(GameState* state) {
-  srand(1);
+  std::ifstream fin{state->curLevel};
+  if (!fin.good()) {
+    printf("\"Unable to open level file %s\"", state->curLevel.c_str());
+  }
+  auto json = nlohmann::json::parse(fin);
 
-  constexpr size_t width = 7;
-  constexpr size_t height = 5;
+  auto size = json["size"];
+  size_t width = size[0].get<size_t>();
+  size_t height = size[1].get<size_t>();
 
-  state->bulletsRenderTexture.create(width * TILE_SIZE, height * TILE_SIZE);
+  state->bulletsRenderTexture.create((unsigned int)(width * TILE_SIZE),
+                                     (unsigned int)(height * TILE_SIZE));
   state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
                                   true);
   state->bulletsShader1.setUniform("target",
                                    state->bulletsRenderTexture.getTexture());
   state->bulletsShader1.setUniform(
-      "boardSize", sf::Glsl::Vec2{width * TILE_SIZE, height * TILE_SIZE});
+      "boardSize",
+      sf::Glsl::Vec2{(float)(width * TILE_SIZE), (float)(height * TILE_SIZE)});
 
   // floor
   static std::string floorTextures[4] = {
@@ -102,7 +112,10 @@ void clearBoard(GameState* state) {
   }
 }
 
-void initialize(GameState* state) { setupBoard(state); }
+void initialize(GameState* state) {
+  state->curLevel = "resources/levels/level0.json";
+  setupBoard(state);
+}
 
 void undoBoard(GameState* state) {
   if (state->history.empty()) {
