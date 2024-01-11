@@ -23,4 +23,5 @@ class StraightBulletTile : public Tile {
   void render(GameState* state, size_t x, size_t y, size_t i) override;
   int getBulletValue(GameState* state, size_t x, size_t y,
                      size_t i) const override;
+  SerializedTile serialize() const override;
 };

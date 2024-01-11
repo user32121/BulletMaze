@@ -4,16 +4,16 @@
 
 #include "../GameState.h"
 
-union SerializedTileData {
-  sf::Vector2i texturePos;
-
-  SerializedTileData(){};
-  SerializedTileData(sf::Vector2i v) : texturePos{v} {};
+struct SerializedTileData {
+  sf::Vector2i v2i, v2i2;
+  int i, i2;
+  void* vp;
 };
 
 class Tile;
 struct GameState;
 struct SerializedTile {
+  /// @brief a function to deserialize the data back into a Tile
   Tile* (*restore)(GameState* state, size_t x, size_t y, size_t i,
                    SerializedTileData* data);
   SerializedTileData data;
@@ -54,13 +54,8 @@ class Tile {
   virtual int getBulletValue(GameState* state, size_t x, size_t y,
                              size_t i) const;
 
-  // TODO implement in subclasses
   /// @brief convert the tile data into a compact storage format
   virtual SerializedTile serialize() const;
-
-  /// @brief create a new tile using data formed from serialize()
-  static Tile* restore(GameState* state, size_t x, size_t y, size_t i,
-                       SerializedTileData* data);
 
  protected:
   sf::Sprite sprite;

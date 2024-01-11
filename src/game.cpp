@@ -64,29 +64,32 @@ void setupBoard(GameState* state) {
 
   // spawners
   state->board[width - 1][height - 1].push_back(
-      new BulletSpawnerTile<StraightBulletTile>(
-          state->textureManager.getSprite("resources/textures/spawner.png"), 5,
-          std::function{[](GameState* state, size_t x, size_t y) {
+      new BulletSpawnerTile<StraightBulletTile>{
+          state->textureManager.getSprite("resources/textures/spawner.png"),
+          [](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{state->textureManager.getSprite(
                                               "resources/textures/bulletL.png"),
                                           x, y, LEFT};
-          }}));
+          },
+          5});
   state->board[0][height - 1].push_back(
-      new BulletSpawnerTile<StraightBulletTile>(
-          state->textureManager.getSprite("resources/textures/spawner.png"), 5,
-          std::function{[](GameState* state, size_t x, size_t y) {
+      new BulletSpawnerTile<StraightBulletTile>{
+          state->textureManager.getSprite("resources/textures/spawner.png"),
+          [](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{state->textureManager.getSprite(
                                               "resources/textures/bulletR.png"),
                                           x, y, RIGHT};
-          }}));
+          },
+          5});
   state->board[width - 2][0].push_back(
-      new BulletSpawnerTile<StraightBulletTile>(
-          state->textureManager.getSprite("resources/textures/spawner.png"), 4,
-          2, std::function{[](GameState* state, size_t x, size_t y) {
+      new BulletSpawnerTile<StraightBulletTile>{
+          state->textureManager.getSprite("resources/textures/spawner.png"),
+          [](GameState* state, size_t x, size_t y) {
             return new StraightBulletTile{state->textureManager.getSprite(
                                               "resources/textures/bulletD.png"),
                                           x, y, DOWN, -1};
-          }}));
+          },
+          4, 1});
 
   state->history.clear();
 }
@@ -134,7 +137,6 @@ void handleEvent(GameState* state, sf::Event* event) {
         clearBoard(state);
         setupBoard(state);
       }
-      // TODO Z undo
       if (event->key.code == sf::Keyboard::Z) {
         undoBoard(state);
       }
