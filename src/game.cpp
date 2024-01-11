@@ -63,33 +63,30 @@ void setupBoard(GameState* state) {
   }
 
   // spawners
-  state->board[width - 1][height - 1].push_back(
-      new BulletSpawnerTile<StraightBulletTile>{
-          state->textureManager.getSprite("resources/textures/spawner.png"),
-          [](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{state->textureManager.getSprite(
-                                              "resources/textures/bulletL.png"),
-                                          x, y, LEFT};
-          },
-          5});
-  state->board[0][height - 1].push_back(
-      new BulletSpawnerTile<StraightBulletTile>{
-          state->textureManager.getSprite("resources/textures/spawner.png"),
-          [](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{state->textureManager.getSprite(
-                                              "resources/textures/bulletR.png"),
-                                          x, y, RIGHT};
-          },
-          5});
-  state->board[width - 2][0].push_back(
-      new BulletSpawnerTile<StraightBulletTile>{
-          state->textureManager.getSprite("resources/textures/spawner.png"),
-          [](GameState* state, size_t x, size_t y) {
-            return new StraightBulletTile{state->textureManager.getSprite(
-                                              "resources/textures/bulletD.png"),
-                                          x, y, DOWN, -1};
-          },
-          4, 1});
+  state->board[width - 1][height - 1].push_back(new BulletSpawnerTile{
+      state->textureManager.getSprite("resources/textures/spawner.png"),
+      [](GameState* state, size_t x, size_t y) {
+        return (Tile*)new StraightBulletTile{
+            state->textureManager.getSprite("resources/textures/bulletL.png"),
+            x, y, LEFT};
+      },
+      5});
+  state->board[0][height - 1].push_back(new BulletSpawnerTile{
+      state->textureManager.getSprite("resources/textures/spawner.png"),
+      [](GameState* state, size_t x, size_t y) {
+        return (Tile*)new StraightBulletTile{
+            state->textureManager.getSprite("resources/textures/bulletR.png"),
+            x, y, RIGHT};
+      },
+      5});
+  state->board[width - 2][0].push_back(new BulletSpawnerTile{
+      state->textureManager.getSprite("resources/textures/spawner.png"),
+      [](GameState* state, size_t x, size_t y) {
+        return (Tile*)new StraightBulletTile{
+            state->textureManager.getSprite("resources/textures/bulletD.png"),
+            x, y, DOWN, -1};
+      },
+      4, 1});
 
   state->history.clear();
 }

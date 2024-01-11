@@ -4,14 +4,14 @@
 
 #include "../GameState.h"
 
+class Tile;
+struct GameState;
 struct SerializedTileData {
   sf::Vector2i v2i, v2i2;
   int i, i2;
-  void* vp;
+  Tile* (*fp)(GameState*, size_t, size_t);
 };
 
-class Tile;
-struct GameState;
 struct SerializedTile {
   /// @brief a function to deserialize the data back into a Tile
   Tile* (*restore)(GameState* state, size_t x, size_t y, size_t i,
