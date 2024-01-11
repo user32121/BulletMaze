@@ -69,3 +69,17 @@ int StraightBulletTile::getBulletValue(GameState*, size_t, size_t,
                                        size_t) const {
   return value;
 }
+
+static Tile* restore(GameState* state, size_t x, size_t y, size_t,
+                     SerializedTileData* data) {
+  return new StraightBulletTile{state->textureManager.getSprite(data->v2i), x,
+                                y, (DIRECTION)data->i2, data->i};
+}
+
+SerializedTile StraightBulletTile::serialize() const {
+  SerializedTileData data;
+  data.v2i = sprite.getTextureRect().getPosition();
+  data.i = value;
+  data.i2 = dir;
+  return SerializedTile{restore, data};
+}

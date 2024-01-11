@@ -22,4 +22,5 @@ class PlayerTile : public Tile {
   int getZLayer(GameState* state, size_t x, size_t y, size_t i) const override;
   void prepareMove(GameState* state, size_t x, size_t y, size_t i) override;
   bool finishMove(GameState* state, size_t x, size_t y, size_t i) override;
+  SerializedTile serialize() const override;
 };

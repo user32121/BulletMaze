@@ -4,7 +4,21 @@
 
 #include "../GameState.h"
 
+class Tile;
 struct GameState;
+struct SerializedTileData {
+  sf::Vector2i v2i, v2i2;
+  int i, i2;
+  Tile* (*fp)(GameState*, size_t, size_t);
+};
+
+struct SerializedTile {
+  /// @brief a function to deserialize the data back into a Tile
+  Tile* (*restore)(GameState* state, size_t x, size_t y, size_t i,
+                   SerializedTileData* data);
+  SerializedTileData data;
+};
+
 /// @brief Basic tile representing a stationary object on the board.
 class Tile {
  public:
@@ -39,6 +53,9 @@ class Tile {
   /// @brief The value used for calculating whether or not a coordinate is safe
   virtual int getBulletValue(GameState* state, size_t x, size_t y,
                              size_t i) const;
+
+  /// @brief convert the tile data into a compact storage format
+  virtual SerializedTile serialize() const;
 
  protected:
   sf::Sprite sprite;

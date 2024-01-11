@@ -29,4 +29,7 @@ class TextureManager {
   /// @brief returns a sprite that draws the corresponding texture specified by
   /// the filename
   sf::Sprite getSprite(const std::string& filename);
+
+  /// @brief returns a sprite using the specified texture position
+  sf::Sprite getSprite(sf::Vector2i pos);
 };

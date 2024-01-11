@@ -12,6 +12,7 @@ struct Input {
 };
 
 class Tile;
+struct SerializedTile;
 struct GameState {
   // pointers for program interaction
   sf::RenderWindow* window;
@@ -33,6 +34,8 @@ struct GameState {
   std::vector<std::vector<std::vector<Tile*>>> board;
   int safeRangeMin = 0;
   int safeRangeMax = 0;
+  // 4D vector wooo [time, x, y, i]
+  std::vector<std::vector<std::vector<std::vector<SerializedTile>>>> history;
 };
 
 /// @brief checks if the position at (x+vx, y+vy) is in bounds and not blocked

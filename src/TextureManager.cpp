@@ -31,6 +31,11 @@ sf::Sprite TextureManager::getSprite(const std::string& filename) {
                     sf::IntRect(pos.x, pos.y, TILE_SIZE, TILE_SIZE)};
 }
 
+sf::Sprite TextureManager::getSprite(sf::Vector2i pos) {
+  return sf::Sprite{spriteSheet.getTexture(),
+                    sf::IntRect{pos, {TILE_SIZE, TILE_SIZE}}};
+}
+
 sf::Vector2u posAtIndex(size_t i) {
   // de-interleave, x and y should take the even and odd bits, respectively
   size_t x = i & 0x5555555555555555U;

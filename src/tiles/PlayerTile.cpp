@@ -107,3 +107,16 @@ bool PlayerTile::finishMove(GameState* state, size_t x, size_t y, size_t i) {
   state->board[x][y].erase(state->board[x][y].begin() + i);
   return true;
 }
+
+static Tile* restore(GameState* state, size_t x, size_t y, size_t,
+                     SerializedTileData* data) {
+  return new PlayerTile{state->textureManager.getSprite(data->v2i),
+                        state->textureManager.getSprite(data->v2i2), x, y};
+}
+
+SerializedTile PlayerTile::serialize() const {
+  SerializedTileData data;
+  data.v2i = sprite.getTextureRect().getPosition();
+  data.v2i2 = deathSprite.getTextureRect().getPosition();
+  return SerializedTile{restore, data};
+}

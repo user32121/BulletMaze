@@ -11,4 +11,5 @@ class SolidTile : public Tile {
   bool isSolidFor(GameState* state, size_t x, size_t y, size_t i,
                   Tile* other) const override;
   int getZLayer(GameState* state, size_t x, size_t y, size_t i) const override;
+  SerializedTile serialize() const override;
 };

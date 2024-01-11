@@ -12,6 +12,18 @@ void moveBoard(GameState* state) {
 }
 
 void finishMoveBoard(GameState* state) {
+  state->history.push_back({});
+  state->history.back().resize(state->board.size());
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    state->history.back()[x].resize(state->board[x].size());
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      state->history.back()[x][y].resize(state->board[x][y].size());
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        state->history.back()[x][y][i] = state->board[x][y][i]->serialize();
+      }
+    }
+  }
+
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
       for (size_t i = 0; i < state->board[x][y].size(); ++i) {
