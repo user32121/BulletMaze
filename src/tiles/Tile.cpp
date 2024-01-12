@@ -4,7 +4,7 @@
 
 Tile::Tile(sf::Sprite sprite) : sprite{sprite} {}
 
-Tile::Tile(GameState *state, nlohmann::json *json)
+Tile::Tile(GameState* state, nlohmann::json* json, size_t, size_t, size_t)
     : Tile{state->textureManager.getSprite(json->value("sprite", ""))} {}
 
 bool Tile::finishMove(GameState*, size_t, size_t, size_t) { return false; }

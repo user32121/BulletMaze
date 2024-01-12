@@ -16,6 +16,8 @@ class PlayerTile : public Tile {
 
  public:
   PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x, size_t y);
+  PlayerTile(GameState* state, nlohmann::json* json, size_t x, size_t y,
+             size_t i);
 
   void update(GameState* state, size_t x, size_t y, size_t i) override;
   void render(GameState* state, size_t x, size_t y, size_t i) override;

@@ -1,5 +1,4 @@
 {
-  "size": [7, 5],
   "palette": [
     {
       "type": "Tile",
@@ -18,8 +17,9 @@
       "sprite": "resources/textures/floor3.png"
     },
     {
-      "type": "Tile",
-      "sprite": "resources/textures/player.png"
+      "type": "PlayerTile",
+      "sprite": "resources/textures/player.png",
+      "deathSprite": "resources/textures/player.png"
     }
   ],
   "tiles": [

@@ -8,6 +8,13 @@ PlayerTile::PlayerTile(sf::Sprite sprite, sf::Sprite deathSprite, size_t x,
                        size_t y)
     : Tile{sprite}, deathSprite{deathSprite}, moveToX{x}, moveToY{y} {}
 
+PlayerTile::PlayerTile(GameState* state, nlohmann::json* json, size_t x,
+                       size_t y, size_t)
+    : PlayerTile{
+          state->textureManager.getSprite(json->value("sprite", "")),
+          state->textureManager.getSprite(json->value("deathSprite", "")), x,
+          y} {}
+
 void PlayerTile::checkAlive(GameState* state) {
   int value = getBulletValueAt(state, moveToX, moveToY);
   if (value < state->safeRangeMin || value > state->safeRangeMax) {

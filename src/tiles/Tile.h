@@ -25,7 +25,7 @@ struct SerializedTile {
 class Tile {
  public:
   Tile(sf::Sprite sprite);
-  Tile(GameState* state, nlohmann::json* json);
+  Tile(GameState* state, nlohmann::json* json, size_t x, size_t y, size_t i);
 
   Tile(const Tile& other) = default;
   Tile& operator=(const Tile& other) = default;

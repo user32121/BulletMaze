@@ -57,10 +57,13 @@ void loadFallbackLevel(GameState* state) {
   }
 }
 
-Tile* jsonToTile(GameState* state, nlohmann::json* json) {
+Tile* jsonToTile(GameState* state, nlohmann::json* json, size_t x, size_t y,
+                 size_t i) {
   std::string tileType = json->value("type", "");
   if (tileType == "Tile") {
-    return new Tile(state, json);
+    return new Tile(state, json, x, y, i);
+  } else if (tileType == "PlayerTile") {
+    return new PlayerTile(state, json, x, y, i);
   } else {
     throw std::invalid_argument{
         ("Unhandled tile type: \"" + tileType + "\"").c_str()};
@@ -87,34 +90,22 @@ void loadLevel(GameState* state) {
     }
     nlohmann::json json = nlohmann::json::parse(fin);
 
-    auto size = json["size"];
-    if (size.size() < 2) {
-      throw std::exception{("size must have at least 2 items, but has " +
-                            std::to_string(size.size()))
-                               .c_str()};
-    }
-    size_t width = size[0].get<size_t>();
-    size_t height = size[1].get<size_t>();
-
     auto palette = json["palette"];
 
     auto tiles = json["tiles"];
-    state->board.resize(width);
-    if (tiles.size() != width) {
-      printf("Warning: width was %zu but tiles had length %zu\n", width,
-             tiles.size());
-    }
-    for (size_t x = 0; x < tiles.size() && x < width; ++x) {
-      state->board[x].resize(height);
-      if (tiles[x].size() != height) {
-        printf("Warning: height was %zu but tiles[%zu] had length %zu\n",
-               height, x, tiles[x].size());
+    state->board.resize(tiles.size());
+    for (size_t x = 0; x < tiles.size(); ++x) {
+      state->board[x].resize(tiles[x].size());
+      if (tiles[x].size() != tiles[0].size()) {
+        printf(
+            "Warning: tiles[0] has length %zu but tiles[%zu] has length %zu\n",
+            tiles[0].size(), x, tiles[x].size());
       }
-      for (size_t y = 0; y < tiles[x].size() && y < height; ++y) {
+      for (size_t y = 0; y < tiles[x].size(); ++y) {
         state->board[x][y].resize(tiles[x][y].size());
         for (size_t i = 0; i < tiles[x][y].size(); ++i) {
-          state->board[x][y][i] =
-              jsonToTile(state, &palette[tiles[x][y][i].get<size_t>()]);
+          state->board[x][y][i] = jsonToTile(
+              state, &palette[tiles[x][y][i].get<size_t>()], x, y, i);
         }
       }
     }
