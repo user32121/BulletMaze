@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include <SFML/Graphics.hpp>
+#include <exception>
 #include <fstream>
 
 #define JSON_ImplicitConversions 0
@@ -23,27 +24,10 @@ void loadResources(GameState* state) {
   state->bulletsShader2.setUniform("texture", sf::Shader::CurrentTexture);
 }
 
-// TODO selecting different levels
-void setupBoard(GameState* state) {
-  std::ifstream fin{state->curLevel};
-  if (!fin.good()) {
-    printf("\"Unable to open level file %s\"", state->curLevel.c_str());
-  }
-  auto json = nlohmann::json::parse(fin);
-
-  auto size = json["size"];
-  size_t width = size[0].get<size_t>();
-  size_t height = size[1].get<size_t>();
-
-  state->bulletsRenderTexture.create((unsigned int)(width * TILE_SIZE),
-                                     (unsigned int)(height * TILE_SIZE));
-  state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
-                                  true);
-  state->bulletsShader1.setUniform("target",
-                                   state->bulletsRenderTexture.getTexture());
-  state->bulletsShader1.setUniform(
-      "boardSize",
-      sf::Glsl::Vec2{(float)(width * TILE_SIZE), (float)(height * TILE_SIZE)});
+void loadFallbackLevel(GameState* state) {
+  constexpr size_t width = 5;
+  constexpr size_t height = 5;
+  srand(1);
 
   // floor
   static std::string floorTextures[4] = {
@@ -52,7 +36,7 @@ void setupBoard(GameState* state) {
       "resources/textures/floor2.png",
       "resources/textures/floor3.png",
   };
-  state->board.resize(7);
+  state->board.resize(width);
   for (size_t x = 0; x < width; ++x) {
     state->board[x].resize(height);
     for (size_t y = 0; y < height; y++) {
@@ -71,34 +55,16 @@ void setupBoard(GameState* state) {
     state->board[rand() % width][rand() % height].push_back(new SolidTile{
         state->textureManager.getSprite("resources/textures/obstacle.png")});
   }
+}
 
-  // spawners
-  state->board[width - 1][height - 1].push_back(new BulletSpawnerTile{
-      state->textureManager.getSprite("resources/textures/spawner.png"),
-      [](GameState* state, size_t x, size_t y) {
-        return (Tile*)new StraightBulletTile{
-            state->textureManager.getSprite("resources/textures/bulletL.png"),
-            x, y, LEFT};
-      },
-      5});
-  state->board[0][height - 1].push_back(new BulletSpawnerTile{
-      state->textureManager.getSprite("resources/textures/spawner.png"),
-      [](GameState* state, size_t x, size_t y) {
-        return (Tile*)new StraightBulletTile{
-            state->textureManager.getSprite("resources/textures/bulletR.png"),
-            x, y, RIGHT};
-      },
-      5});
-  state->board[width - 2][0].push_back(new BulletSpawnerTile{
-      state->textureManager.getSprite("resources/textures/spawner.png"),
-      [](GameState* state, size_t x, size_t y) {
-        return (Tile*)new StraightBulletTile{
-            state->textureManager.getSprite("resources/textures/bulletD.png"),
-            x, y, DOWN, -1};
-      },
-      4, 1});
-
-  state->history.clear();
+Tile* jsonToTile(GameState* state, nlohmann::json* json) {
+  std::string tileType = json->value("type", "");
+  if (tileType == "Tile") {
+    return new Tile(state, json);
+  } else {
+    throw std::invalid_argument{
+        ("Unhandled tile type: \"" + tileType + "\"").c_str()};
+  }
 }
 
 void clearBoard(GameState* state) {
@@ -110,6 +76,73 @@ void clearBoard(GameState* state) {
       state->board[x][y].clear();
     }
   }
+}
+
+void loadLevel(GameState* state) {
+  try {
+    std::ifstream fin{state->curLevel};
+    if (!fin.good()) {
+      throw std::invalid_argument{
+          ("Unable to open level file \"" + state->curLevel + "\"").c_str()};
+    }
+    nlohmann::json json = nlohmann::json::parse(fin);
+
+    auto size = json["size"];
+    if (size.size() < 2) {
+      throw std::exception{("size must have at least 2 items, but has " +
+                            std::to_string(size.size()))
+                               .c_str()};
+    }
+    size_t width = size[0].get<size_t>();
+    size_t height = size[1].get<size_t>();
+
+    auto palette = json["palette"];
+
+    auto tiles = json["tiles"];
+    state->board.resize(width);
+    if (tiles.size() != width) {
+      printf("Warning: width was %zu but tiles had length %zu\n", width,
+             tiles.size());
+    }
+    for (size_t x = 0; x < tiles.size() && x < width; ++x) {
+      state->board[x].resize(height);
+      if (tiles[x].size() != height) {
+        printf("Warning: height was %zu but tiles[%zu] had length %zu\n",
+               height, x, tiles[x].size());
+      }
+      for (size_t y = 0; y < tiles[x].size() && y < height; ++y) {
+        state->board[x][y].resize(tiles[x][y].size());
+        for (size_t i = 0; i < tiles[x][y].size(); ++i) {
+          state->board[x][y][i] =
+              jsonToTile(state, &palette[tiles[x][y][i].get<size_t>()]);
+        }
+      }
+    }
+  } catch (std::exception& e) {
+    printf("An exception ocurred while loading level:\n  %s\n", e.what());
+    clearBoard(state);
+    puts("Loading fallback level\n");
+    loadFallbackLevel(state);
+  }
+}
+
+void setupBoard(GameState* state) {
+  loadLevel(state);
+  state->history.clear();
+
+  // resources dependent on level data
+  size_t width = state->board.size();
+  size_t height = width ? state->board[0].size() : 0;
+
+  state->bulletsRenderTexture.create((unsigned int)(width * TILE_SIZE),
+                                     (unsigned int)(height * TILE_SIZE));
+  state->bulletsSprite.setTexture(state->bulletsRenderTexture.getTexture(),
+                                  true);
+  state->bulletsShader1.setUniform("target",
+                                   state->bulletsRenderTexture.getTexture());
+  state->bulletsShader1.setUniform(
+      "boardSize",
+      sf::Glsl::Vec2{(float)(width * TILE_SIZE), (float)(height * TILE_SIZE)});
 }
 
 void initialize(GameState* state) {

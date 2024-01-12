@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#define JSON_ImplicitConversions 0
+#include "../../libs/nlohmann/json.hpp"
 #include "../GameState.h"
 
 class Tile;
@@ -23,6 +25,7 @@ struct SerializedTile {
 class Tile {
  public:
   Tile(sf::Sprite sprite);
+  Tile(GameState* state, nlohmann::json* json);
 
   Tile(const Tile& other) = default;
   Tile& operator=(const Tile& other) = default;
