@@ -2,9 +2,17 @@
 
 #include "../TextureManager.h"
 
+// TODO bullet doesn't render after undo+move on a period 0 spawner
+
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir, int value)
     : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
+
+StraightBulletTile::StraightBulletTile(GameState* state, nlohmann::json* json,
+                                       size_t x, size_t y, size_t)
+    : StraightBulletTile{
+          state->textureManager.getSprite(json->value("sprite", "")), x, y,
+          json->value("dir", LEFT), json->value("value", 0)} {}
 
 int StraightBulletTile::getZLayer(GameState*, size_t, size_t, size_t) const {
   return 200;

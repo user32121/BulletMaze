@@ -5,21 +5,7 @@
 #define JSON_ImplicitConversions 0
 #include "../../libs/nlohmann/json.hpp"
 #include "../GameState.h"
-
-class Tile;
-struct GameState;
-struct SerializedTileData {
-  sf::Vector2i v2i, v2i2;
-  int i, i2;
-  Tile* (*fp)(GameState*, size_t, size_t);
-};
-
-struct SerializedTile {
-  /// @brief a function to deserialize the data back into a Tile
-  Tile* (*restore)(GameState* state, size_t x, size_t y, size_t i,
-                   SerializedTileData* data);
-  SerializedTileData data;
-};
+#include "TileUtils.h"
 
 /// @brief Basic tile representing a stationary object on the board.
 class Tile {

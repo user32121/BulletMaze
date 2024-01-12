@@ -2,6 +2,10 @@
 
 SolidTile::SolidTile(sf::Sprite sprite) : Tile{sprite} {}
 
+SolidTile::SolidTile(GameState *state, nlohmann::json *json, size_t, size_t,
+                     size_t)
+    : SolidTile{state->textureManager.getSprite(json->value("sprite", ""))} {}
+
 bool SolidTile::isSolidFor(GameState*, size_t, size_t, size_t, Tile*) const {
   return true;
 }

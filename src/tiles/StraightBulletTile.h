@@ -16,6 +16,8 @@ class StraightBulletTile : public Tile {
  public:
   StraightBulletTile(sf::Sprite sprite, size_t x, size_t y, DIRECTION dir,
                      int value = 1);
+  StraightBulletTile(GameState* state, nlohmann::json* json, size_t x, size_t y,
+                     size_t i);
 
   int getZLayer(GameState* state, size_t x, size_t y, size_t i) const override;
   void prepareMove(GameState* state, size_t x, size_t y, size_t i) override;

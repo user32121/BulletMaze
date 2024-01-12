@@ -11,6 +11,7 @@
 #include "tiles/PlayerTile.h"
 #include "tiles/SolidTile.h"
 #include "tiles/StraightBulletTile.h"
+#include "tiles/TileUtils.h"
 
 void loadResources(GameState* state) {
   if (!sf::Shader::isAvailable()) {
@@ -57,19 +58,6 @@ void loadFallbackLevel(GameState* state) {
   }
 }
 
-Tile* jsonToTile(GameState* state, nlohmann::json* json, size_t x, size_t y,
-                 size_t i) {
-  std::string tileType = json->value("type", "");
-  if (tileType == "Tile") {
-    return new Tile(state, json, x, y, i);
-  } else if (tileType == "PlayerTile") {
-    return new PlayerTile(state, json, x, y, i);
-  } else {
-    throw std::invalid_argument{
-        ("Unhandled tile type: \"" + tileType + "\"").c_str()};
-  }
-}
-
 void clearBoard(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
@@ -77,6 +65,19 @@ void clearBoard(GameState* state) {
         delete state->board[x][y][i];
       }
       state->board[x][y].clear();
+    }
+  }
+}
+
+template <typename UnaryFunction>
+void recursiveIterate(nlohmann::json* json, UnaryFunction f) {
+  for (auto it = json->begin(); it != json->end(); ++it) {
+    if (json->is_object() && it.key() == "ref") {
+      f(json);
+      break;
+    }
+    if (it.value().is_structured()) {
+      recursiveIterate(&it.value(), f);
     }
   }
 }
@@ -90,9 +91,14 @@ void loadLevel(GameState* state) {
     }
     nlohmann::json json = nlohmann::json::parse(fin);
 
-    auto palette = json["palette"];
+    nlohmann::json& palette = json["palette"];
+    // recursively replace any objects containing "ref": <int> with the
+    // corresponding palette entry
+    recursiveIterate(&json, [palette](nlohmann::json* ref) {
+      *ref = palette[ref->value("ref", 0)];
+    });
 
-    auto tiles = json["tiles"];
+    nlohmann::json& tiles = json["tiles"];
     state->board.resize(tiles.size());
     for (size_t x = 0; x < tiles.size(); ++x) {
       state->board[x].resize(tiles[x].size());
