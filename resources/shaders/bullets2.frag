@@ -20,5 +20,6 @@ void main(){
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
     pixel.y = pixel.y * 255 - 127;
 
-    gl_FragColor = pixel.xxxw * gl_Color * cols[int(round(clamp(pixel.y + 3, 0, 7)))];
+    //TODO transform alpha to hue
+    gl_FragColor = pixel.xxxw * gl_Color * cols[int(round(clamp(pixel.y + 3, 0, 6)))];
 }
