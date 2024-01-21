@@ -43,9 +43,9 @@
         "type": "StraightBulletTile",
         "sprite": "resources/textures/bulletL.png",
         "dir": 0,
-        "value": -3
+        "value": -1
       },
-      "spawnPeriod": 0
+      "spawnPeriod": 1
     },
     {
       "type": "BulletSpawnerTile",

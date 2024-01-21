@@ -4,7 +4,8 @@
 
 BulletSpawnerTile::BulletSpawnerTile(
     sf::Sprite sprite, Tile *(*spawn)(GameState *state, size_t x, size_t y),
-    int spawnPeriod, int initialSpawnDelay, nlohmann::json altSpawnData)
+    unsigned int spawnPeriod, unsigned int initialSpawnDelay,
+    nlohmann::json altSpawnData)
     : Tile{sprite},
       spawnDelayMax{spawnPeriod},
       spawnDelay{initialSpawnDelay + 1},
@@ -15,7 +16,7 @@ BulletSpawnerTile::BulletSpawnerTile(GameState *state, nlohmann::json *json,
                                      size_t, size_t, size_t)
     : BulletSpawnerTile{
           state->textureManager.getSprite(json->value("sprite", "")), nullptr,
-          json->value("spawnPeriod", 0), json->value("initialSpawnDelay", 0),
+          json->value("spawnPeriod", 1u), json->value("initialSpawnDelay", 0u),
           (*json)["bullet"]} {}
 
 int BulletSpawnerTile::getZLayer(GameState *, size_t, size_t, size_t) const {
@@ -45,7 +46,8 @@ void BulletSpawnerTile::prepareMove(GameState *state, size_t x, size_t y,
 Tile *restoreBulletSpawnerTile(GameState *state, size_t, size_t, size_t,
                                SerializedTileData *data) {
   return new BulletSpawnerTile{state->textureManager.getSprite(data->v2i),
-                               data->fp, data->i2, data->i, data->json};
+                               data->fp, (unsigned int)data->i2,
+                               (unsigned int)data->i, data->json};
 }
 
 SerializedTile BulletSpawnerTile::serialize() const {

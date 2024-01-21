@@ -2,8 +2,6 @@
 
 #include "../TextureManager.h"
 
-// TODO bullet doesn't render after undo+move on a period 0 spawner
-
 StraightBulletTile::StraightBulletTile(sf::Sprite sprite, size_t x, size_t y,
                                        DIRECTION dir, int value)
     : Tile{sprite}, dir{dir}, moveToX{x}, moveToY{y}, value{value} {}
