@@ -7,6 +7,8 @@ class SolidTile : public Tile {
  private:
  public:
   SolidTile(sf::Sprite sprite);
+  SolidTile(GameState* state, nlohmann::json* json, size_t x, size_t y,
+            size_t i);
 
   bool isSolidFor(GameState* state, size_t x, size_t y, size_t i,
                   Tile* other) const override;

@@ -1,0 +1,77 @@
+{
+  "palette": [
+    {
+      "type": "Tile",
+      "sprite": "resources/textures/floor0.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "resources/textures/floor1.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "resources/textures/floor2.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "resources/textures/floor3.png"
+    },
+    {
+      "type": "PlayerTile",
+      "sprite": "resources/textures/player.png",
+      "deathSprite": "resources/textures/playerDead.png"
+    },
+    {
+      "type": "SolidTile",
+      "sprite": "resources/textures/obstacle.png"
+    },
+    {
+      "type": "StraightBulletTile",
+      "sprite": "resources/textures/bulletL.png",
+      "dir": 0,
+      "value": 2
+    },
+    {
+      "type": "BulletSpawnerTile",
+      "sprite": "resources/textures/spawner.png",
+      "bullet": { "ref": 6 }
+    },
+    {
+      "type": "BulletSpawnerTile",
+      "sprite": "resources/textures/spawner.png",
+      "bullet": {
+        "type": "StraightBulletTile",
+        "sprite": "resources/textures/bulletL.png",
+        "dir": 0,
+        "value": -1
+      },
+      "spawnPeriod": 1
+    },
+    {
+      "type": "BulletSpawnerTile",
+      "sprite": "resources/textures/spawner.png",
+      "bullet": {
+        "type": "StraightBulletTile",
+        "sprite": "resources/textures/bulletD.png",
+        "dir": 3,
+        "value": 1
+      },
+      "spawnPeriod": 3
+    },
+    {
+      "type": "StraightBulletTile",
+      "sprite": "resources/textures/bulletR.png",
+      "dir": 1,
+      "value": 2
+    }
+  ],
+  "tiles": [
+    [[1, 4], [3], [2], [1], [3]],
+    [[3], [2, 5], [3], [1], [1]],
+    [[1, 10], [1], [3, 5], [3], [1]],
+    [[3], [2], [3], [0], [3]],
+    [[2, 9], [2], [0], [1], [0]],
+    [[3], [1], [3], [1, 5], [0]],
+    [[1, 6], [3, 7], [3], [3], [1, 8]]
+  ]
+}

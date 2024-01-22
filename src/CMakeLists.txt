@@ -3,6 +3,7 @@ target_sources(BulletMaze PRIVATE
     game.cpp
     GameState.cpp
     TextureManager.cpp
+    tiles/TileUtils.cpp
     tiles/Tile.cpp
     tiles/PlayerTile.cpp
     tiles/SolidTile.cpp
