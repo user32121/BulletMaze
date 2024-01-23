@@ -15,8 +15,9 @@ vec3 hsv2rgb(vec3 c)
 
 void main(){
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
-    pixel.y = pixel.y * 255 - 127;
+    pixel.y = pixel.y * 255 - 127 + pixel.w;
+    pixel.w = abs(pixel.y);
 
-    //still would prefer some colouring based on total alpha rather than bullet value
-    gl_FragColor = gl_Color * pixel.xxxw * vec4(hsv2rgb(vec3(clamp(pixel.y, -4, 4) / 10 - 0.12, 1, 1)), clamp(abs(pixel.y), 0.5, 1));
+    float hue = clamp(sqrt(abs(pixel.y) * 4) * sign(pixel.y), -4, 4) / 10 - 0.2;
+    gl_FragColor = gl_Color * pixel.xxxw * vec4(hsv2rgb(vec3(hue, 1, 1)), 1);
 }
