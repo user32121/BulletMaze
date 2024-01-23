@@ -56,7 +56,7 @@
         "dir": 3,
         "value": 1
       },
-      "spawnPeriod": 3
+      "spawnPeriod": 1
     },
     {
       "type": "StraightBulletTile",
