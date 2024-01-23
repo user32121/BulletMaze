@@ -91,6 +91,8 @@ void loadLevel(GameState* state) {
     }
     nlohmann::json json = nlohmann::json::parse(fin);
 
+    // TODO safe range
+
     nlohmann::json& palette = json["palette"];
     // recursively replace any objects containing "ref": <int> with the
     // corresponding palette entry
@@ -110,6 +112,7 @@ void loadLevel(GameState* state) {
       for (size_t y = 0; y < tiles[x].size(); ++y) {
         state->board[x][y].resize(tiles[x][y].size());
         for (size_t i = 0; i < tiles[x][y].size(); ++i) {
+          // TODO palette bounds checking
           state->board[x][y][i] = jsonToTile(
               state, &palette[tiles[x][y][i].get<size_t>()], x, y, i);
         }
@@ -143,7 +146,7 @@ void setupBoard(GameState* state) {
 }
 
 void initialize(GameState* state) {
-  state->curLevel = "resources/levels/level0.json";
+  state->curLevel = "resources/levels/level1.json";
   setupBoard(state);
 }
 
