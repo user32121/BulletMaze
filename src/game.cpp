@@ -30,6 +30,9 @@ void loadFallbackLevel(GameState* state) {
   constexpr size_t height = 5;
   srand(1);
 
+  state->safeRangeMin = 0;
+  state->safeRangeMax = 0;
+
   // floor
   static std::string floorTextures[4] = {
       "resources/textures/floor0.png",
@@ -91,13 +94,20 @@ void loadLevel(GameState* state) {
     }
     nlohmann::json json = nlohmann::json::parse(fin);
 
-    // TODO safe range
+    // safe range
+    state->safeRangeMin = json.value("safeRangeMin", 0);
+    state->safeRangeMax = json.value("safeRangeMax", 0);
 
     nlohmann::json& palette = json["palette"];
     // recursively replace any objects containing "ref": <int> with the
     // corresponding palette entry
     recursiveIterate(&json, [palette](nlohmann::json* ref) {
-      *ref = palette[ref->value("ref", 0)];
+      size_t tileID = ref->value("ref", 0);
+      if (tileID < 0 || tileID >= palette.size()) {
+        throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
+                                " is out of range of the palette"};
+      }
+      *ref = palette[tileID];
     });
 
     nlohmann::json& tiles = json["tiles"];
@@ -112,9 +122,12 @@ void loadLevel(GameState* state) {
       for (size_t y = 0; y < tiles[x].size(); ++y) {
         state->board[x][y].resize(tiles[x][y].size());
         for (size_t i = 0; i < tiles[x][y].size(); ++i) {
-          // TODO palette bounds checking
-          state->board[x][y][i] = jsonToTile(
-              state, &palette[tiles[x][y][i].get<size_t>()], x, y, i);
+          size_t tileID = tiles[x][y][i].get<size_t>();
+          if (tileID < 0 || tileID >= palette.size()) {
+            throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
+                                    " is out of range of the palette"};
+          }
+          state->board[x][y][i] = jsonToTile(state, &palette[tileID], x, y, i);
         }
       }
     }
