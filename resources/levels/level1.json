@@ -1,4 +1,6 @@
 {
+  "safeRangeMin": -1,
+  "safeRangeMax": 0,
   "palette": [
     {
       "type": "Tile",
