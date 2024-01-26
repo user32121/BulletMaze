@@ -24,12 +24,6 @@ set(TEST_TARGET Test)
 add_executable(${TEST_TARGET} EXCLUDE_FROM_ALL)
 target_link_libraries(${TEST_TARGET} PRIVATE sfml-graphics ${PRIMARY_TARGET_LIB})
 add_subdirectory(test)
-add_custom_command(
-    TARGET ${TEST_TARGET}
-    COMMENT "Run Tests"
-    POST_BUILD
-    COMMAND ${TEST_TARGET}
-)
 
 #windows DLL dependency
 if(WIN32)
@@ -46,6 +40,12 @@ add_custom_command(
     COMMENT "Copy resources"
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/resources
+)
+add_custom_command(
+    TARGET ${TEST_TARGET}
+    COMMENT "Copy test resources"
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/test/test_resources ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/test_resources
 )
 
 #warnings

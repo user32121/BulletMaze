@@ -1,7 +1,5 @@
 #include "TextureManager.h"
 
-// TODO test cases
-
 void TextureManager::increaseSize() {
   sf::Vector2u spriteSheetSize = spriteSheet.getSize();
   sf::RenderTexture temp;
