@@ -1,3 +1,4 @@
-target_sources(${TEST_EXECUTABLE} PRIVATE 
+target_sources(${TEST_TARGET} PRIVATE 
     test.cpp
+    testTextureManager.cpp
 )

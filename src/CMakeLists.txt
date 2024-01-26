@@ -1,5 +1,8 @@
-target_sources(BulletMaze PRIVATE 
+target_sources(${PRIMARY_TARGET} PRIVATE 
     main.cpp
+)
+
+target_sources(${PRIMARY_TARGET_LIB} PRIVATE 
     game.cpp
     GameState.cpp
     TextureManager.cpp
