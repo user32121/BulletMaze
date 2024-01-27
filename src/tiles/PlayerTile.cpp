@@ -72,7 +72,7 @@ void PlayerTile::render(GameState* state, size_t x, size_t y, size_t) {
   float interY = (y * (1 - delta) + moveToY * delta);
   sf::Sprite* renderSprite = alive ? &sprite : &deathSprite;
   renderSprite->setPosition(interX * TILE_SIZE, interY * TILE_SIZE);
-  state->window->draw(*renderSprite);
+  state->windowRT->draw(*renderSprite);
 }
 
 int PlayerTile::getZLayer(GameState*, size_t, size_t, size_t) const {

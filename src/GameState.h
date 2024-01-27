@@ -15,8 +15,9 @@ class Tile;
 struct SerializedTile;
 struct GameState {
   // pointers for program interaction
-  sf::RenderWindow* window;
-  sf::Clock* clock;
+  sf::Window* windowW = nullptr;
+  sf::RenderTarget* windowRT = nullptr;
+  sf::Clock* clock = nullptr;
 
   // resources
   TextureManager textureManager;

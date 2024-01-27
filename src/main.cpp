@@ -7,7 +7,8 @@ int main() {
   window.setFramerateLimit(60);
   sf::Clock clock;
   GameState state;
-  state.window = &window;
+  state.windowW = &window;
+  state.windowRT = &window;
   state.clock = &clock;
 
   loadResources(&state);

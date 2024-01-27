@@ -185,7 +185,7 @@ void undoBoard(GameState* state) {
 void handleEvent(GameState* state, sf::Event* event) {
   switch (event->type) {
     case sf::Event::Closed:
-      state->window->close();
+      state->windowW->close();
       break;
     case sf::Event::KeyPressed:
       state->input.presses.push(event->key.code);
@@ -240,7 +240,7 @@ void render(GameState* state) {
   }
 
   state->bulletsRenderTexture.display();
-  state->window->draw(state->bulletsSprite, &state->bulletsShader2);
+  state->windowRT->draw(state->bulletsSprite, &state->bulletsShader2);
 }
 
 void uninitialize(GameState* state) { clearBoard(state); }
