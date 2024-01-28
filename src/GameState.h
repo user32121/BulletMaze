@@ -14,6 +14,9 @@ struct Input {
 class Tile;
 struct SerializedTile;
 struct GameState {
+  GameState(sf::RenderWindow* window, sf::Clock* clock);
+  GameState(sf::Window* windowW, sf::RenderTarget* windowRT, sf::Clock* clock);
+
   // pointers for program interaction
   sf::Window* windowW = nullptr;
   sf::RenderTarget* windowRT = nullptr;

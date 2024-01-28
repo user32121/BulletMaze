@@ -13,17 +13,6 @@
 #include "tiles/StraightBulletTile.h"
 #include "tiles/TileUtils.h"
 
-void initialize(GameState* state, sf::RenderWindow* window, sf::Clock* clock) {
-  initialize(state, window, window, clock);
-}
-
-void initialize(GameState* state, sf::Window* windowW,
-                sf::RenderTarget* windowRT, sf::Clock* clock) {
-  state->windowW = windowW;
-  state->windowRT = windowRT;
-  state->clock = clock;
-}
-
 void loadResources(GameState* state) {
   if (!sf::Shader::isAvailable()) {
     puts("Shaders are not available on this system");

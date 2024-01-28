@@ -4,16 +4,10 @@
 
 #include "GameState.h"
 
-///@brief Prepares initial game statte. Called before loadResources()
-void initialize(GameState* state, sf::RenderWindow* window, sf::Clock* clock);
-void initialize(GameState* state, sf::Window* windowW,
-                sf::RenderTarget* windowRT, sf::Clock* clock);
-
-/// @brief Loads all resources needed by the game. Called after initialize() and
-/// before setupBoard().
+/// @brief Loads all resources needed by the game.
 void loadResources(GameState* state);
 
-/// @brief Loads level. Called after loadResources().
+/// @brief Loads level.
 void setupBoard(GameState* state,
                 std::string level = "resources/levels/level1.json");
 

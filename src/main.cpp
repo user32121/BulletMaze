@@ -6,9 +6,8 @@ int main() {
   sf::RenderWindow window{{800, 600}, "Bullet Maze"};
   window.setFramerateLimit(60);
   sf::Clock clock;
-  GameState state;
+  GameState state{&window, &clock};
 
-  initialize(&state, &window, &clock);
   loadResources(&state);
   setupBoard(&state);
   while (window.isOpen()) {

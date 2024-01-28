@@ -63,7 +63,7 @@ void checkTiles(GameState* state, Tile* t1, Tile* t2) {
 }
 
 TEST_CASE("serialize Tile") {
-  GameState state;
+  GameState state{nullptr, nullptr};
   initialize(&state);
 
   Tile* t1 = new Tile{
@@ -79,7 +79,7 @@ TEST_CASE("serialize Tile") {
 }
 
 TEST_CASE("serialize SolidTile") {
-  GameState state;
+  GameState state{nullptr, nullptr};
   initialize(&state);
 
   Tile* t1 = new SolidTile{
@@ -95,7 +95,7 @@ TEST_CASE("serialize SolidTile") {
 }
 
 TEST_CASE("serialize PlayerTile") {
-  GameState state;
+  GameState state{nullptr, nullptr};
   initialize(&state);
 
   Tile* t1 = new PlayerTile{
@@ -112,7 +112,7 @@ TEST_CASE("serialize PlayerTile") {
 }
 
 TEST_CASE("serialize StraightBulletTile") {
-  GameState state;
+  GameState state{nullptr, nullptr};
   initialize(&state);
 
   Tile* t1 = new StraightBulletTile{
@@ -129,7 +129,7 @@ TEST_CASE("serialize StraightBulletTile") {
 }
 
 TEST_CASE("serialize BulletSpawnerTile") {
-  GameState state;
+  GameState state{nullptr, nullptr};
   initialize(&state);
 
   Tile* t1 = new BulletSpawnerTile{
