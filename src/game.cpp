@@ -103,7 +103,7 @@ void loadLevel(GameState* state) {
     // corresponding palette entry
     recursiveIterate(&json, [palette](nlohmann::json* ref) {
       size_t tileID = ref->value("ref", 0);
-      if (tileID < 0 || tileID >= palette.size()) {
+      if (tileID >= palette.size()) {
         throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
                                 " is out of range of the palette"};
       }
@@ -123,7 +123,7 @@ void loadLevel(GameState* state) {
         state->board[x][y].resize(tiles[x][y].size());
         for (size_t i = 0; i < tiles[x][y].size(); ++i) {
           size_t tileID = tiles[x][y][i].get<size_t>();
-          if (tileID < 0 || tileID >= palette.size()) {
+          if (tileID >= palette.size()) {
             throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
                                     " is out of range of the palette"};
           }
