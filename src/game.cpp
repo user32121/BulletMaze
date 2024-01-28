@@ -13,6 +13,17 @@
 #include "tiles/StraightBulletTile.h"
 #include "tiles/TileUtils.h"
 
+void initialize(GameState* state, sf::RenderWindow* window, sf::Clock* clock) {
+  initialize(state, window, window, clock);
+}
+
+void initialize(GameState* state, sf::Window* windowW,
+                sf::RenderTarget* windowRT, sf::Clock* clock) {
+  state->windowW = windowW;
+  state->windowRT = windowRT;
+  state->clock = clock;
+}
+
 void loadResources(GameState* state) {
   if (!sf::Shader::isAvailable()) {
     puts("Shaders are not available on this system");
@@ -139,7 +150,8 @@ void loadLevel(GameState* state) {
   }
 }
 
-void setupBoard(GameState* state) {
+void setupBoard(GameState* state, std::string level) {
+  state->curLevel = level;
   loadLevel(state);
   state->history.clear();
 
@@ -156,11 +168,6 @@ void setupBoard(GameState* state) {
   state->bulletsShader1.setUniform(
       "boardSize",
       sf::Glsl::Vec2{(float)(width * TILE_SIZE), (float)(height * TILE_SIZE)});
-}
-
-void initialize(GameState* state) {
-  state->curLevel = "resources/levels/level1.json";
-  setupBoard(state);
 }
 
 void undoBoard(GameState* state) {

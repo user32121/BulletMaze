@@ -7,12 +7,10 @@ int main() {
   window.setFramerateLimit(60);
   sf::Clock clock;
   GameState state;
-  state.windowW = &window;
-  state.windowRT = &window;
-  state.clock = &clock;
 
+  initialize(&state, &window, &clock);
   loadResources(&state);
-  initialize(&state);
+  setupBoard(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
       handleEvent(&state, &event);
