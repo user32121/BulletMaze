@@ -1,0 +1,61 @@
+{
+  "palette": [
+    {
+      "type": "Tile",
+      "sprite": "test_resources/textures/img0.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "test_resources/textures/img1.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "test_resources/textures/img2.png"
+    },
+    {
+      "type": "Tile",
+      "sprite": "test_resources/textures/img3.png"
+    },
+    {
+      "type": "PlayerTile",
+      "sprite": "test_resources/textures/img4.png",
+      "deathSprite": "test_resources/textures/img5.png"
+    },
+    {
+      "type": "SolidTile",
+      "sprite": "test_resources/textures/img6.png"
+    },
+    {
+      "type": "StraightBulletTile",
+      "sprite": "test_resources/textures/img7.png",
+      "dir": 1,
+      "value": 2
+    },
+    {
+      "type": "BulletSpawnerTile",
+      "sprite": "test_resources/textures/img8.png",
+      "bullet": { "ref": 6 }
+    },
+    {
+      "type": "BulletSpawnerTile",
+      "sprite": "test_resources/textures/img9.png",
+      "bullet": {
+        "type": "StraightBulletTile",
+        "sprite": "test_resources/textures/img10.png",
+        "dir": 0,
+        "value": -1
+      },
+      "spawnPeriod": 1
+    }
+  ],
+  "tiles": [
+    [
+      [1, 6],
+      [3, 4],
+      [0, 5]
+    ],
+    [[3], [2, 7], [3, 8]]
+  ],
+  "safeRangeMin": 0,
+  "safeRangeMax": 1
+}
