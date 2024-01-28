@@ -1,17 +1,17 @@
 #include "GameState.h"
 
-void moveBoard(GameState* state) {
-  state->moveDelta = 0;
-  for (size_t x = 0; x < state->board.size(); ++x) {
-    for (size_t y = 0; y < state->board[x].size(); ++y) {
-      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
-        state->board[x][y][i]->prepareMove(state, x, y, i);
-      }
-    }
-  }
-}
+#include "game.h"
 
-void finishMoveBoard(GameState* state) {
+GameState::GameState(sf::RenderWindow* window, sf::Clock* clock)
+    : GameState{window, window, clock} {}
+
+GameState::GameState(sf::Window* windowW, sf::RenderTarget* windowRT,
+                     sf::Clock* clock)
+    : windowW{windowW}, windowRT{windowRT}, clock{clock} {}
+
+GameState::~GameState() { clearBoard(this); }
+
+void moveBoard(GameState* state) {
   state->history.push_back({});
   state->history.back().resize(state->board.size());
   for (size_t x = 0; x < state->board.size(); ++x) {
@@ -24,6 +24,17 @@ void finishMoveBoard(GameState* state) {
     }
   }
 
+  state->moveDelta = 0;
+  for (size_t x = 0; x < state->board.size(); ++x) {
+    for (size_t y = 0; y < state->board[x].size(); ++y) {
+      for (size_t i = 0; i < state->board[x][y].size(); ++i) {
+        state->board[x][y][i]->prepareMove(state, x, y, i);
+      }
+    }
+  }
+}
+
+void finishMoveBoard(GameState* state) {
   for (size_t x = 0; x < state->board.size(); ++x) {
     for (size_t y = 0; y < state->board[x].size(); ++y) {
       for (size_t i = 0; i < state->board[x][y].size(); ++i) {

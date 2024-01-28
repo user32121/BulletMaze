@@ -4,11 +4,12 @@
 
 #include "GameState.h"
 
-/// @brief Loads all resources needed by the game. Called before initialize().
+/// @brief Loads all resources needed by the game.
 void loadResources(GameState* state);
 
-/// @brief Prepares initial game state. Called after loadResources().
-void initialize(GameState* state);
+/// @brief Loads level.
+void setupBoard(GameState* state,
+                std::string level = "resources/levels/level1.json");
 
 /// @brief Called for each event that occurs
 void handleEvent(GameState* state, sf::Event* event);
@@ -19,5 +20,5 @@ void update(GameState* state);
 /// @brief Performs rendering calls.
 void render(GameState* state);
 
-/// @brief Cleans up any resources used.
-void uninitialize(GameState* state);
+/// @brief Clears board data
+void clearBoard(GameState* state);

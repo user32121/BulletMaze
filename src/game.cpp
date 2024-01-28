@@ -103,7 +103,7 @@ void loadLevel(GameState* state) {
     // corresponding palette entry
     recursiveIterate(&json, [palette](nlohmann::json* ref) {
       size_t tileID = ref->value("ref", 0);
-      if (tileID < 0 || tileID >= palette.size()) {
+      if (tileID >= palette.size()) {
         throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
                                 " is out of range of the palette"};
       }
@@ -123,7 +123,7 @@ void loadLevel(GameState* state) {
         state->board[x][y].resize(tiles[x][y].size());
         for (size_t i = 0; i < tiles[x][y].size(); ++i) {
           size_t tileID = tiles[x][y][i].get<size_t>();
-          if (tileID < 0 || tileID >= palette.size()) {
+          if (tileID >= palette.size()) {
             throw std::out_of_range{"Tile ID " + std::to_string(tileID) +
                                     " is out of range of the palette"};
           }
@@ -139,7 +139,8 @@ void loadLevel(GameState* state) {
   }
 }
 
-void setupBoard(GameState* state) {
+void setupBoard(GameState* state, std::string level) {
+  state->curLevel = level;
   loadLevel(state);
   state->history.clear();
 
@@ -156,11 +157,6 @@ void setupBoard(GameState* state) {
   state->bulletsShader1.setUniform(
       "boardSize",
       sf::Glsl::Vec2{(float)(width * TILE_SIZE), (float)(height * TILE_SIZE)});
-}
-
-void initialize(GameState* state) {
-  state->curLevel = "resources/levels/level1.json";
-  setupBoard(state);
 }
 
 void undoBoard(GameState* state) {
@@ -185,7 +181,7 @@ void undoBoard(GameState* state) {
 void handleEvent(GameState* state, sf::Event* event) {
   switch (event->type) {
     case sf::Event::Closed:
-      state->window->close();
+      state->windowW->close();
       break;
     case sf::Event::KeyPressed:
       state->input.presses.push(event->key.code);
@@ -240,7 +236,5 @@ void render(GameState* state) {
   }
 
   state->bulletsRenderTexture.display();
-  state->window->draw(state->bulletsSprite, &state->bulletsShader2);
+  state->windowRT->draw(state->bulletsSprite, &state->bulletsShader2);
 }
-
-void uninitialize(GameState* state) { clearBoard(state); }

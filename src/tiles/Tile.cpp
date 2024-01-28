@@ -11,7 +11,7 @@ bool Tile::finishMove(GameState*, size_t, size_t, size_t) { return false; }
 
 void Tile::render(GameState* state, size_t x, size_t y, size_t) {
   sprite.setPosition(float(x * TILE_SIZE), float(y * TILE_SIZE));
-  state->window->draw(sprite);
+  state->windowRT->draw(sprite);
 }
 
 int Tile::getZLayer(GameState*, size_t, size_t, size_t) const { return 0; }

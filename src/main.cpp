@@ -6,12 +6,10 @@ int main() {
   sf::RenderWindow window{{800, 600}, "Bullet Maze"};
   window.setFramerateLimit(60);
   sf::Clock clock;
-  GameState state;
-  state.window = &window;
-  state.clock = &clock;
+  GameState state{&window, &clock};
 
   loadResources(&state);
-  initialize(&state);
+  setupBoard(&state);
   while (window.isOpen()) {
     for (sf::Event event{}; window.pollEvent(event);) {
       handleEvent(&state, &event);
@@ -21,5 +19,4 @@ int main() {
     render(&state);
     window.display();
   }
-  uninitialize(&state);
 }

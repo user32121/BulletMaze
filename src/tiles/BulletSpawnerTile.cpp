@@ -53,7 +53,7 @@ Tile *restoreBulletSpawnerTile(GameState *state, size_t, size_t, size_t,
 SerializedTile BulletSpawnerTile::serialize() const {
   SerializedTileData data;
   data.v2i = sprite.getTextureRect().getPosition();
-  data.i = spawnDelay;
+  data.i = spawnDelay - 1;
   data.i2 = spawnDelayMax;
   data.fp = spawner;
   data.json = altSpawnData;
