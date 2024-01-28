@@ -1,11 +1,15 @@
 #include "GameState.h"
 
+#include "game.h"
+
 GameState::GameState(sf::RenderWindow* window, sf::Clock* clock)
     : GameState{window, window, clock} {}
 
 GameState::GameState(sf::Window* windowW, sf::RenderTarget* windowRT,
                      sf::Clock* clock)
     : windowW{windowW}, windowRT{windowRT}, clock{clock} {}
+
+GameState::~GameState() { clearBoard(this); }
 
 void moveBoard(GameState* state) {
   state->history.push_back({});

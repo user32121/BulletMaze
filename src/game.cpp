@@ -238,5 +238,3 @@ void render(GameState* state) {
   state->bulletsRenderTexture.display();
   state->windowRT->draw(state->bulletsSprite, &state->bulletsShader2);
 }
-
-void uninitialize(GameState* state) { clearBoard(state); }

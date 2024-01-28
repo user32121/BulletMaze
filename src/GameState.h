@@ -17,6 +17,10 @@ struct GameState {
   GameState(sf::RenderWindow* window, sf::Clock* clock);
   GameState(sf::Window* windowW, sf::RenderTarget* windowRT, sf::Clock* clock);
 
+  GameState(const GameState& other) = delete;
+  GameState& operator=(const GameState& other) = delete;
+  ~GameState();
+
   // pointers for program interaction
   sf::Window* windowW = nullptr;
   sf::RenderTarget* windowRT = nullptr;

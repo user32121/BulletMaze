@@ -19,5 +19,4 @@ int main() {
     render(&state);
     window.display();
   }
-  uninitialize(&state);
 }

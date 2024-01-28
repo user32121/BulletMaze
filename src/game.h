@@ -20,5 +20,5 @@ void update(GameState* state);
 /// @brief Performs rendering calls.
 void render(GameState* state);
 
-/// @brief Cleans up any resources used.
-void uninitialize(GameState* state);
+/// @brief Clears board data
+void clearBoard(GameState* state);
