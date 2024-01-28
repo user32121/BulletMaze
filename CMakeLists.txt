@@ -13,7 +13,7 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 set(PRIMARY_TARGET_LIB ${PRIMARY_TARGET}_lib)
-add_library(${PRIMARY_TARGET_LIB})
+add_library(${PRIMARY_TARGET_LIB} STATIC)
 target_link_libraries(${PRIMARY_TARGET_LIB} PRIVATE sfml-graphics)
 target_compile_features(${PRIMARY_TARGET_LIB} PUBLIC cxx_std_17)
 
