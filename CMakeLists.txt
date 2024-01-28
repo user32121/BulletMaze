@@ -49,11 +49,13 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/test/test_resources ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/test_resources
 )
 
-#run tests
-add_custom_command(
-    TARGET ${TEST_TARGET}
+#run
+add_custom_target(Run
+    COMMAND ${PRIMARY_TARGET}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
+)
+add_custom_target(RunTest
     COMMENT "Run Tests"
-    POST_BUILD
     COMMAND ${TEST_TARGET}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
 )
