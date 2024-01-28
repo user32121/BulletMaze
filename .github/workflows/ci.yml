@@ -40,6 +40,6 @@ jobs:
       shell: bash
       run: cmake --install build --config Release
 
-    - name: Build
+    - name: Test
       shell: bash
       run: cmake --build build --config Release --target Test
